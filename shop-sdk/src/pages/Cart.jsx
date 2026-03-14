@@ -35,9 +35,8 @@ const Cart = ({ cartCustomization = {} }) => {
 
     const deviceSettings = cartCustomization[activeDevice] || cartCustomization.desktop || {};
     const { drawerPosition, iconColor, badgeColor, badgeTextColor } = cartCustomization;
-    const rawDrawerWidth = deviceSettings.drawerWidth ?? 360;
-    const isFullDrawer = activeDevice === 'phone' || drawerPosition === 'full' || rawDrawerWidth === 0;
-    const drawerWidth = isFullDrawer ? '100%' : `${rawDrawerWidth}px`;
+    const isFullDrawer = activeDevice === 'phone' || drawerPosition === 'full' || deviceSettings.drawerWidth === 0;
+    const drawerWidth = isFullDrawer ? '100%' : `${deviceSettings.drawerWidth}px`;
 
 
     return (

@@ -8,11 +8,11 @@ const CartContent = ({ products, cartCustomization, deviceSettings, onClose, onR
         checkoutButtonTextColor, borderColor, itemPriceColor,
         fontFamily,
     } = cartCustomization;
-    const titleFontSize  = deviceSettings.titleFontSize  ?? 18;
-    const priceFontSize  = deviceSettings.priceFontSize  ?? 14;
-    const subtotalLabelFontSize = deviceSettings.subtotalLabelFontSize ?? priceFontSize;
-    const buttonFontSize = deviceSettings.buttonFontSize ?? 14;
-    const showThumbnails = deviceSettings.showThumbnails ?? cartCustomization.showThumbnails ?? true;
+    const titleFontSize  = deviceSettings.titleFontSize;
+    const priceFontSize  = deviceSettings.priceFontSize;
+    const subtotalLabelFontSize = deviceSettings.subtotalLabelFontSize;
+    const buttonFontSize = deviceSettings.buttonFontSize;
+    const showThumbnails = deviceSettings.showThumbnails;
     const subtotal = products.reduce((sum, p) => sum + Number(p.variants?.[0]?.price ?? 0), 0);
 
     return (

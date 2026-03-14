@@ -2,16 +2,16 @@ import { FaTrash } from "react-icons/fa";
 import ProductThumbnail from "./ProductThumbnail";
 
 
-const CartItemRow = ({ key, product, cartCustomization, deviceSettings, showThumbnails, onRemoveItem }) => {
+const CartItemRow = ({ product, cartCustomization, deviceSettings, showThumbnails, onRemoveItem }) => {
     const { itemTextColor, itemPriceColor, removeButtonText, borderColor } = cartCustomization;
-    const thumbnailSize = deviceSettings.thumbnailSize ?? 56;
-    const productNameFontSize = deviceSettings.itemFontSize ?? 14;
-    const descriptionFontSize = deviceSettings.descriptionFontSize ?? Math.max(10, productNameFontSize - 2);
-    const quantityFontSize = deviceSettings.quantityFontSize ?? Math.max(10, productNameFontSize - 2);
-    const priceFontSize = deviceSettings.priceFontSize ?? 14;
-    const price = product.variants?.[0]?.price ?? 0;
+    const thumbnailSize = deviceSettings.thumbnailSize;
+    const productNameFontSize = deviceSettings.itemFontSize;
+    const descriptionFontSize = deviceSettings.descriptionFontSize;
+    const quantityFontSize = deviceSettings.quantityFontSize;
+    const priceFontSize = deviceSettings.priceFontSize;
+    const price = product.variants?.[0]?.price;
     return (
-        <div key={key} className="flex items-start gap-3 py-3" style={{ borderBottomWidth: 1, borderBottomStyle: 'solid', borderBottomColor: borderColor }}>
+        <div className="flex items-start gap-3 py-3" style={{ borderBottomWidth: 1, borderBottomStyle: 'solid', borderBottomColor: borderColor }}>
             {showThumbnails && <ProductThumbnail product={product} size={thumbnailSize} />}
             <div className="flex-1 min-w-0">
                 <p className="font-medium truncate" style={{ color: itemTextColor, fontSize: productNameFontSize }}>{product.name}</p>
