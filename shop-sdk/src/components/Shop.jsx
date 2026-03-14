@@ -3,10 +3,10 @@ import ProductCard from "./ProductCard";
 import PaginationControls from "./PaginationControls";
 import Chips from "./Chips";
 import ProductDetailModal from "./ProductDetailModal";
+import useWindowDimensions from "../hooks/useScreenWidth";
 
 
 const normalizeConfig = (config) => {
-    console.log(config.config_json)
     return {
         ...config.config_json.global_config,
         desktop: {... config.config_json.devices.desktop},
@@ -17,7 +17,18 @@ const normalizeConfig = (config) => {
 
 
 
-const Shop = ({ products = [], customization = {}, activeDevice, reserveHeaderSpace = false }) => {
+const Shop = ({ products = [], customization = {} }) => {
+    const [activeDevice, setActiveDevice] = useState('desktop');
+    const { width } = useWindowDimensions();
+
+    useEffect(() => {
+        const newActiveDevice = (width < 768 ) ? 'phone' : (  width < 1024  ) ? 'tablet' : 'desktop';
+        if (newActiveDevice !== activeDevice) {
+            setActiveDevice(newActiveDevice);
+        }
+    }, [width, activeDevice]);
+
+
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -43,7 +54,6 @@ const Shop = ({ products = [], customization = {}, activeDevice, reserveHeaderSp
         setCurrentPage(1);
     }, [activeDevice, itemsPerPage, selectedCategories, searchQuery]);
 
-    console.log("Normalized Customization:", normalizedCustomization);
     const visibleProducts = products.filter(p => p.visibility);
 
     const categoryChips = Array.from( new Set(visibleProducts.map(product => product.category?.name).filter(Boolean) ) );
@@ -54,13 +64,6 @@ const Shop = ({ products = [], customization = {}, activeDevice, reserveHeaderSp
         }
     }, [selectedCategories, categoryChips]);
 
-
-    // Device preview dimensions
-    const deviceDimensions = {
-        desktop: { maxWidth: '100%', label: 'Desktop Preview' },
-        tablet: { maxWidth: '768px', label: 'Tablet Preview (768px)' },
-        phone: { maxWidth: '375px', label: 'Phone Preview (375px)' },
-    };
 
     const normalizedSearchQuery = searchQuery.trim().toLowerCase();
     const categoryFilteredProducts = selectedCategories.length === 0 ? visibleProducts : visibleProducts.filter(product => selectedCategories.includes(product.category?.name));
@@ -83,7 +86,7 @@ const Shop = ({ products = [], customization = {}, activeDevice, reserveHeaderSp
     return (
         <>
         <div className="flex flex-col items-center">
-            <div  className="border border-gray-300 bg-white rounded-lg p-3 sm:p-6 min-h-[400px] w-full transition-all duration-300" style={{ maxWidth: deviceDimensions[activeDevice].maxWidth }} >
+            <div  className="border border-gray-300 bg-white rounded-lg p-3 sm:p-6 min-h-[400px] w-full transition-all duration-300 w-full" >
                 {/* Products Grid */}
                 <>
                     <div className="mb-4">

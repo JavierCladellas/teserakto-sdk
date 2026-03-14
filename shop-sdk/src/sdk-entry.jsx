@@ -1,4 +1,3 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 import Shop from "./components/Shop";
 import { fetchProducts, fetchCustomization } from "./api.jsx";
@@ -12,13 +11,13 @@ import "./index.css";
 async function initShop(containerId, apiKey) {
     const container = document.getElementById(containerId);
     if (!container) {
-        console.error(`[ShopSDK] Container with id "${containerId}" not found`);
+        console.error(`[TeseraktoShopSDK] Container with id "${containerId}" not found`);
         return;
     }
     if (!apiKey) {
-        console.error("[ShopSDK] No API key provided");
+        console.error("[TeseraktoShopSDK] No API key provided");
         return;
-        }
+    }
 
     try {
         // Fetch products and customization
@@ -34,27 +33,15 @@ async function initShop(containerId, apiKey) {
             <Shop
             products={products}
             customization={customization}
-            activeDevice="desktop"
             reserveHeaderSpace={true}
             />
         );
-        } catch (err) {
-        console.error("[ShopSDK] Failed to initialize shop", err);
+    } catch (err) {
+        console.error("[TeseraktoShopSDK] Failed to initialize shop", err);
         container.innerHTML = `<div style="color:red;padding:20px;">Failed to load shop. See console for details.</div>`;
     }
 }
 
-// Auto-init if used via script tag with data-key and data-container
-const script = document.currentScript;
-if (script) {
-    const containerId = script.dataset.container || "teserakto-shop";
-    const apiKey = script.dataset.key;
-    if (apiKey) {
-        initShop(containerId, apiKey);
-    }
-}
+window.TeseraktoShopSDK = { initShop };
 
-// Expose global object for merchants
-window.ShopSDK = { initShop };
-
-export const ShopSDK = { initShop };
+export const TeseraktoShopSDK = { initShop };
