@@ -7,7 +7,7 @@ const ProductCard = ({ product, customization, activeDevice = 'desktop', onClick
     const [isJustAdded, setIsJustAdded] = useState(false);
     const variant = product.variants?.[0];
     const price = variant?.price || 0;
-    const inStock = product.has_stock;
+    const inStock = (product.is_variable ? true : product.has_stock);
 
     const deviceSettings = customization[activeDevice] || customization.desktop || {};
     const titleFontSize = deviceSettings.titleFontSize ?? 18;

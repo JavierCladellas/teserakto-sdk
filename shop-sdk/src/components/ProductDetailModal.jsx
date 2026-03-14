@@ -41,10 +41,10 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
 
     if (!product) return null;
 
-    const inStock = product.has_stock;
     const deviceSettings = customization[activeDevice] || customization.desktop || {};
     const quantity = Math.max(1, parseInt(quantityInput, 10) || 1);
 
+    const currentInStock = (product.is_variable ? selectedVariant.has_stock : product.has_stock);
     const currentImage = product.image_url || selectedVariant?.image_url;
     const currentPrice = selectedVariant?.price || 0;
 
@@ -115,7 +115,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                             alt={product.name}
                             className="w-full h-full object-contain"
                         />
-                        {!inStock && (
+                        {!currentInStock && (
                             <div className="absolute inset-0 bg-white/60 flex items-center justify-center">
                                 <span className="text-lg font-semibold" style={{ color: customization.outOfStockColor || '#ef4444' }}>{customization.outOfStockText || 'Out of Stock'}</span>
                             </div>
@@ -234,7 +234,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
 
                     <div className="mt-4 pt-4 border-t border-gray-200 md:absolute md:bottom-0 md:left-0 md:right-0 md:mt-0 md:bg-white md:pt-4">
                         {/* Quantity Selector */}
-                        {inStock && (
+                        {currentInStock && (
                             <div className="mb-4">
                                 <h3 
                                     className="font-semibold mb-2"
@@ -293,13 +293,13 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                                 fontSize: `${deviceSettings.buttonFontSize || 14}px`
                             }}
                             onClick={() => {
-                                if (!inStock) return;
+                                if (!currentInStock) return;
                                 setIsJustAdded(true);
                                 onAddToCart?.(product, quantity);
                             }}
-                            disabled={!inStock}
+                            disabled={!currentInStock}
                         >
-                            {inStock
+                            {currentInStock
                                 ? (isJustAdded
                                     ? (customization.addedToCartText || 'Added!')
                                     : `${customization.addToCartText || 'Add to Cart'}${quantity > 1 ? ` (${quantity})` : ''}`)
