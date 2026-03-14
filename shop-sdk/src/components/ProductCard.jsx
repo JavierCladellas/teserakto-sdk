@@ -27,6 +27,10 @@ const ProductCard = ({ product, customization, activeDevice = 'desktop', onClick
 
     const handleAddToCartClick = (event) => {
         event.stopPropagation();
+        if (product.is_variable) {
+            onClick?.(product);
+            return;
+        }
         if (!inStock) return;
         setIsJustAdded(true);
         onAddToCart?.(product, 1);
@@ -115,9 +119,9 @@ const ProductCard = ({ product, customization, activeDevice = 'desktop', onClick
                         disabled={!inStock}
                     >
                         {inStock
-                            ? (isJustAdded
-                                ? (customization.addedToCartText)
-                                : (customization.addToCartText))
+                            ? (
+                                !product.is_variable && isJustAdded ? (customization.addedToCartText) : (customization.addToCartText)
+                            )
                             : (customization.outOfStockText)}
                     </button>
                 </div>

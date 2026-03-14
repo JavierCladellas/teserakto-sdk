@@ -45,15 +45,7 @@ const Shop = ({ products = [], customization = {} }) => {
         setShowProductModal(true);
     };
     const handleAddToCart = () => {
-        if (selectedProduct?.is_variable) {
-            //open product modal to select variant
-            setShowProductModal(true);
-            return;
-        }
-        else {
-            //add to cart directly
-            console.log(`Adding product ${selectedProduct.name} to cart`);
-        }
+        console.log(`Adding product ${selectedProduct?.name} to cart`);
     };
 
     const normalizedCustomization = normalizeConfig(customization);
