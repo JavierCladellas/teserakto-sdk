@@ -9,7 +9,6 @@ const ProductCard = ({ product, customization, activeDevice = 'desktop', onClick
     const price = variant?.price || 0;
     const inStock = product.has_stock;
 
-    // Get font sizes for the active device
     const deviceSettings = customization[activeDevice] || customization.desktop || {};
     const titleFontSize = deviceSettings.titleFontSize ?? 18;
     const descriptionFontSize = deviceSettings.descriptionFontSize ?? 14;
