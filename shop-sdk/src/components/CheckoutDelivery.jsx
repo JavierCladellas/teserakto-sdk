@@ -67,6 +67,16 @@ const CheckoutDelivery = ({ settings, deviceSettings }) => {
                 {settings.allowDeliveryDate !== false && (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                         {/* <DateField label={settings.deliveryDeliveryDateLabel} placeholder="DD-MM-YYYY" style={{ fontSize: deviceSettings.formFieldFontSize }} /> */}
+                        <div className="">
+                            <label className="text-gray-700 mb-1 flex items-center gap-1"
+                            style={{fontSize: deviceSettings.formFieldFontSize}}>{settings.deliveryDeliveryDateLabel}</label>
+                            <input
+                                type="date"
+                                className="w-full bg-white rounded-md border border-gray-300 px-3 py-2 text-gray-700 placeholder-gray-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200"
+                                style={{ fontSize: deviceSettings.formFieldFontSize }}
+                            />
+                        </div>
+                        
                         {/* BUG THIS IS NOT WORKING */}
                         <SearchableDropdown label={settings.deliveryTimeSlotLabel} placeholder="10:00-12:00" value="morning" options={[
                             { label: "Morning (9AM-12PM)", value: "morning" },
