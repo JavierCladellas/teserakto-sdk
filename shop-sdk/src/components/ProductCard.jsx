@@ -6,14 +6,14 @@ const apiUrl = import.meta.env.VITE_API_URL;
 const ProductCard = ({ product, customization, activeDevice = 'desktop', onClick, onAddToCart }) => {
     const [isJustAdded, setIsJustAdded] = useState(false);
     const variant = product.variants?.[0];
-    const price = variant?.price || 0;
+    const price = variant?.price;
     const inStock = (product.is_variable ? true : product.has_stock);
 
     const deviceSettings = customization[activeDevice] || customization.desktop || {};
-    const titleFontSize = deviceSettings.titleFontSize ?? 18;
-    const descriptionFontSize = deviceSettings.descriptionFontSize ?? 14;
-    const priceFontSize = deviceSettings.priceFontSize ?? 16;
-    const buttonFontSize = deviceSettings.buttonFontSize ?? 14;
+    const titleFontSize = deviceSettings.titleFontSize ;
+    const descriptionFontSize = deviceSettings.descriptionFontSize;
+    const priceFontSize = deviceSettings.priceFontSize;
+    const buttonFontSize = deviceSettings.buttonFontSize;
 
     useEffect(() => {
         if (!isJustAdded) return;
@@ -59,8 +59,8 @@ const ProductCard = ({ product, customization, activeDevice = 'desktop', onClick
             {!inStock && (
                 <>
                     <div className="absolute inset-0 bg-white/60 pointer-events-none z-10"></div>
-                    <div className="absolute top-2 left-2 text-white text-xs px-2 py-1 rounded z-10" style={{ backgroundColor: customization.outOfStockColor || '#ef4444' }}>
-                        {customization.outOfStockText || 'Out of Stock'}
+                    <div className="absolute top-2 left-2 text-white text-xs px-2 py-1 rounded z-10" style={{ backgroundColor: customization.outOfStockColor }}>
+                        {customization.outOfStockText}
                     </div>
                 </>
             )}
@@ -85,7 +85,7 @@ const ProductCard = ({ product, customization, activeDevice = 'desktop', onClick
                             fontSize: `${descriptionFontSize}px`
                         }}
                     >
-                        {product.description || "No description available"}
+                        {product.description}
                     </p>
                 </div>
                 <div className={`flex gap-2 min-h-[42px] ${
@@ -109,16 +109,16 @@ const ProductCard = ({ product, customization, activeDevice = 'desktop', onClick
                         onClick={handleAddToCartClick}
                         style={{ 
                             backgroundColor: customization.buttonColor,
-                            color: customization.buttonTextColor || '#ffffff',
+                            color: customization.buttonTextColor,
                             fontSize: `${buttonFontSize}px`
                         }}
                         disabled={!inStock}
                     >
                         {inStock
                             ? (isJustAdded
-                                ? (customization.addedToCartText || 'Added!')
-                                : (customization.addToCartText || 'Add to Cart'))
-                            : (customization.outOfStockText || 'Out of Stock')}
+                                ? (customization.addedToCartText)
+                                : (customization.addToCartText))
+                            : (customization.outOfStockText)}
                     </button>
                 </div>
             </div>

@@ -46,7 +46,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
 
     const currentInStock = (product.is_variable ? selectedVariant?.has_stock : product.has_stock);
     const currentImage = product.image_url || selectedVariant?.image_url;
-    const currentPrice = selectedVariant?.price || 0;
+    const currentPrice = selectedVariant?.price ;
 
     // Get all unique attributes from all variants
     const getProductAttributes = () => {
@@ -117,7 +117,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                         />
                         {!currentInStock && (
                             <div className="absolute inset-0 bg-white/60 flex items-center justify-center">
-                                <span className="text-lg font-semibold" style={{ color: customization.outOfStockColor || '#ef4444' }}>{customization.outOfStockText || 'Out of Stock'}</span>
+                                <span className="text-lg font-semibold" style={{ color: customization.outOfStockColor }}>{customization.outOfStockText }</span>
                             </div>
                         )}
                     </div>
@@ -131,7 +131,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                             className="font-bold mb-2"
                             style={{ 
                                 color: customization.titleColor,
-                                fontSize: `${deviceSettings.titleFontSize || 22}px`
+                                fontSize: `${deviceSettings.titleFontSize}px`
                             }}
                         >
                             {selectedVariant && product.variants?.length > 1 ? selectedVariant.name : product.name}
@@ -150,10 +150,10 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                                 className="text-2xl font-bold"
                                 style={{ 
                                     color: customization.priceColor,
-                                    fontSize: `${deviceSettings.priceFontSize || 24}px`
+                                    fontSize: `${deviceSettings.priceFontSize}px`
                                 }}
                             >
-                                ${currentPrice.toFixed(2)}
+                                ${currentPrice?.toFixed(2)}
                             </span>
                         </div>
                         {/* Variants Selection - Attribute Based */}
@@ -163,7 +163,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                                     className="font-semibold mb-3"
                                     style={{ 
                                         color: customization.titleColor,
-                                        fontSize: `${deviceSettings.titleFontSize || 16}px`
+                                        fontSize: `${deviceSettings.titleFontSize}px`
                                     }}
                                 >
                                     Options
@@ -174,7 +174,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                                             className="block text-sm font-medium mb-2"
                                             style={{ 
                                                 color: customization.textColor,
-                                                fontSize: `${deviceSettings.descriptionFontSize || 14}px`
+                                                fontSize: `${deviceSettings.descriptionFontSize}px`
                                             }}
                                         >
                                             {attribute.name}
@@ -192,7 +192,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                                                     style={{ 
                                                         borderColor: selectedAttributes[attribute.id] === value.id ? customization.buttonColor : undefined,
                                                         color: selectedAttributes[attribute.id] === value.id ? customization.buttonColor : customization.textColor,
-                                                        fontSize: `${deviceSettings.buttonFontSize || 14}px`,
+                                                        fontSize: `${deviceSettings.buttonFontSize}px`,
                                                         backgroundColor: selectedAttributes[attribute.id] === value.id ? `${customization.buttonColor}10` : 'transparent'
                                                     }}
                                                 >
@@ -211,7 +211,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                                 className="font-semibold mb-2"
                                 style={{ 
                                     color: customization.titleColor,
-                                    fontSize: `${deviceSettings.titleFontSize || 16}px`
+                                    fontSize: `${deviceSettings.titleFontSize}px`
                                 }}
                             >
                                 Description
@@ -220,12 +220,12 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                                 className="text-gray-700"
                                 style={{ 
                                     color: customization.textColor,
-                                    fontSize: `${deviceSettings.descriptionFontSize || 14}px`,
+                                    fontSize: `${deviceSettings.descriptionFontSize}px`,
                                     whiteSpace: 'pre-wrap',
                                     wordWrap: 'break-word'
                                 }}
                             >
-                                {product.description || "No description available"}
+                                {product.description}
                             </p>
                         </div>
 
@@ -240,7 +240,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                                     className="font-semibold mb-2"
                                     style={{ 
                                         color: customization.titleColor,
-                                        fontSize: `${deviceSettings.titleFontSize || 16}px`
+                                        fontSize: `${deviceSettings.titleFontSize}px`
                                     }}
                                 >
                                     Quantity
@@ -268,7 +268,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                                         }}
                                         className="w-20 h-10 text-center border-2 border-gray-300 rounded-md appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                                         style={{ 
-                                            fontSize: `${deviceSettings.buttonFontSize || 14}px`,
+                                            fontSize: `${deviceSettings.buttonFontSize }px`,
                                             color: customization.textColor
                                         }}
                                         min="1"
@@ -289,8 +289,8 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                             className="w-full py-3 rounded-md text-white font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                             style={{ 
                                 backgroundColor: customization.buttonColor,
-                                color: customization.buttonTextColor || '#ffffff',
-                                fontSize: `${deviceSettings.buttonFontSize || 14}px`
+                                color: customization.buttonTextColor,
+                                fontSize: `${deviceSettings.buttonFontSize}px`
                             }}
                             onClick={() => {
                                 if (!currentInStock) return;
@@ -301,9 +301,9 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                         >
                             {currentInStock
                                 ? (isJustAdded
-                                    ? (customization.addedToCartText || 'Added!')
-                                    : `${customization.addToCartText || 'Add to Cart'}${quantity > 1 ? ` (${quantity})` : ''}`)
-                                : (customization.outOfStockText || 'Out of Stock')}
+                                    ? (customization.addedToCartText)
+                                    : `${customization.addToCartText}${quantity > 1 ? ` (${quantity})` : ''}`)
+                                : (customization.outOfStockText)}
                         </button>
                     </div>
                 </div>

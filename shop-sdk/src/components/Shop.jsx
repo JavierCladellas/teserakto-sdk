@@ -44,12 +44,22 @@ const Shop = ({ products = [], customization = {} }) => {
         setSelectedProduct(product);
         setShowProductModal(true);
     };
-    const handleAddToCart = () => {};
+    const handleAddToCart = () => {
+        if (selectedProduct?.is_variable) {
+            //open product modal to select variant
+            setShowProductModal(true);
+            return;
+        }
+        else {
+            //add to cart directly
+            console.log(`Adding product ${selectedProduct.name} to cart`);
+        }
+    };
 
     const normalizedCustomization = normalizeConfig(customization);
 
     const activeDeviceSettings = normalizedCustomization[activeDevice] || normalizedCustomization.desktop;
-    const itemsPerPage = Math.max(1, (activeDeviceSettings?.columns || 3) * (activeDeviceSettings?.rowsPerPage || 10));
+    const itemsPerPage = Math.max(1, (activeDeviceSettings?.columns) * (activeDeviceSettings?.rowsPerPage));
     useEffect(() => {
         setCurrentPage(1);
     }, [activeDevice, itemsPerPage, selectedCategories, searchQuery]);
@@ -105,7 +115,7 @@ const Shop = ({ products = [], customization = {} }) => {
                             selectedItems={selectedCategories}
                             onItemClick={toggleCategory}
                             onClearFilters={() => setSelectedCategories([])}
-                            selectedChipColor={normalizedCustomization.selectedChipColor || '#4f46e5'}
+                            selectedChipColor={normalizedCustomization.selectedChipColor }
                         />
                     )}
 
