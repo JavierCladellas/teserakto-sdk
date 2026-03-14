@@ -1,7 +1,7 @@
 import { FaTimes } from "react-icons/fa";
 import CartItemRow from "./CartItemRow";
 
-const CartContent = ({ products, cartCustomization, deviceSettings, onClose, onRemoveItem }) => {
+const CartContent = ({ products, cartCustomization, deviceSettings, onClose, onRemoveItem, checkoutUrl }) => {
     const {
         backgroundColor, titleColor, titleText,
         subtotalLabelText, checkoutButtonText, checkoutButtonColor,
@@ -37,6 +37,7 @@ const CartContent = ({ products, cartCustomization, deviceSettings, onClose, onR
                     type="button"
                     className="w-full py-2.5 rounded-md font-semibold transition-opacity hover:opacity-90"
                     style={{ backgroundColor: checkoutButtonColor, color: checkoutButtonTextColor, fontSize: buttonFontSize }}
+                    onClick={() => window.location.href = checkoutUrl}
                 >
                     {checkoutButtonText}
                 </button>

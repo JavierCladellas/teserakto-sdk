@@ -8,7 +8,7 @@ import useCart from "../hooks/useCart";
  * Cart — absolute overlay rendered on top of ShopPreview.
  * Parent container must be `position: relative` with a defined height.
  */
-const Cart = ({ cartCustomization = {} }) => {
+const Cart = ({ cartCustomization = {}, checkoutUrl }) => {
     const [activeDevice, setActiveDevice] = useState('desktop');
     const { width } = useWindowDimensions();
 
@@ -70,6 +70,7 @@ const Cart = ({ cartCustomization = {} }) => {
                         deviceSettings={deviceSettings}
                         onClose={() => setShowDrawer(false)}
                         onRemoveItem={handleRemoveItem}
+                        checkoutUrl={checkoutUrl}
                     />
                 </div>
             )}
