@@ -44,7 +44,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
     const deviceSettings = customization[activeDevice] || customization.desktop || {};
     const quantity = Math.max(1, parseInt(quantityInput, 10) || 1);
 
-    const currentInStock = (product.is_variable ? selectedVariant.has_stock : product.has_stock);
+    const currentInStock = (product.is_variable ? selectedVariant?.has_stock : product.has_stock);
     const currentImage = product.image_url || selectedVariant?.image_url;
     const currentPrice = selectedVariant?.price || 0;
 
@@ -131,7 +131,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                             className="font-bold mb-2"
                             style={{ 
                                 color: customization.titleColor,
-                                fontSize: `${deviceSettings.titleFontSize ? deviceSettings.titleFontSize + 4 : 22}px`
+                                fontSize: `${deviceSettings.titleFontSize || 22}px`
                             }}
                         >
                             {selectedVariant && product.variants?.length > 1 ? selectedVariant.name : product.name}
@@ -150,7 +150,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                                 className="text-2xl font-bold"
                                 style={{ 
                                     color: customization.priceColor,
-                                    fontSize: `${deviceSettings.priceFontSize ? deviceSettings.priceFontSize + 8 : 24}px`
+                                    fontSize: `${deviceSettings.priceFontSize || 24}px`
                                 }}
                             >
                                 ${currentPrice.toFixed(2)}
@@ -163,7 +163,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                                     className="font-semibold mb-3"
                                     style={{ 
                                         color: customization.titleColor,
-                                        fontSize: `${deviceSettings.titleFontSize ? deviceSettings.titleFontSize - 2 : 16}px`
+                                        fontSize: `${deviceSettings.titleFontSize || 16}px`
                                     }}
                                 >
                                     Options
@@ -211,7 +211,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                                 className="font-semibold mb-2"
                                 style={{ 
                                     color: customization.titleColor,
-                                    fontSize: `${deviceSettings.titleFontSize ? deviceSettings.titleFontSize - 2 : 16}px`
+                                    fontSize: `${deviceSettings.titleFontSize || 16}px`
                                 }}
                             >
                                 Description
@@ -240,7 +240,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                                     className="font-semibold mb-2"
                                     style={{ 
                                         color: customization.titleColor,
-                                        fontSize: `${deviceSettings.titleFontSize ? deviceSettings.titleFontSize - 2 : 16}px`
+                                        fontSize: `${deviceSettings.titleFontSize || 16}px`
                                     }}
                                 >
                                     Quantity
