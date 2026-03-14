@@ -6,7 +6,7 @@ const apiUrl = import.meta.env.VITE_API_URL;
 const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDevice = 'desktop', onAddToCart }) => {
     const [selectedVariant, setSelectedVariant] = useState(product?.variants?.[0] || null);
     const [selectedAttributes, setSelectedAttributes] = useState({});
-    const [quantityInput, setQuantityInput] = useState('1');
+    const [quantityInput, setQuantityInput] = useState(1);
     const [isJustAdded, setIsJustAdded] = useState(false);
 
     useEffect(() => {
@@ -18,6 +18,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                 initialAttributes[attr.attribute.id] = attr.attribute_value.id;
             });
             setSelectedAttributes(initialAttributes);
+            setQuantityInput(1);
             setIsJustAdded(false);
         }
     }, [product]);
