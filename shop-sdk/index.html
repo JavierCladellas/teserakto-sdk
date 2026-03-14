@@ -5,10 +5,16 @@
     <title>SDK Dev Test</title>
   </head>
   <body>
+
+    <nav style="background: #eee; padding: 10px; margin-bottom: 20px; display:flex; justify-content: space-between; align-items: center; padding: 16px;">
+      <div>Store</div>
+      <div id="teserakto-cart"></div>
+    </nav>
+
     <div id="teserakto-shop"></div>
     <script type="module">
       import { TeseraktoShopSDK } from "./src/sdk-entry.jsx";
-      TeseraktoShopSDK.initShop("teserakto-shop", "ak_RWP6G7ZFXFQ70JB73R1N5FX7VB9Q2273");
+      TeseraktoShopSDK.init("ak_RWP6G7ZFXFQ70JB73R1N5FX7VB9Q2273");
     </script>
   </body>
 </html>

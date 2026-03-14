@@ -1,23 +1,14 @@
 import { useEffect, useState } from "react";
-import ProductCard from "./ProductCard";
-import PaginationControls from "./PaginationControls";
-import Chips from "./Chips";
-import ProductDetailModal from "./ProductDetailModal";
+import ProductCard from "../components/ProductCard";
+import PaginationControls from "../components/PaginationControls";
+import Chips from "../components/Chips";
+import ProductDetailModal from "../components/ProductDetailModal";
 import useWindowDimensions from "../hooks/useScreenWidth";
-
-
-const normalizeConfig = (config) => {
-    return {
-        ...config.config_json.global_config,
-        desktop: {... config.config_json.devices.desktop},
-        tablet: {... config.config_json.devices.tablet},
-        phone: {... config.config_json.devices.phone},
-    };
-}
+import useCart from "../hooks/useCart";
 
 
 
-const Shop = ({ products = [], customization = {} }) => {
+const Shop = ({ products = [],customization = {} }) => {
     const [activeDevice, setActiveDevice] = useState('desktop');
     const { width } = useWindowDimensions();
 
@@ -28,6 +19,7 @@ const Shop = ({ products = [], customization = {} }) => {
         }
     }, [width, activeDevice]);
 
+    const { addToCart } = useCart();
 
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategories, setSelectedCategories] = useState([]);
@@ -44,13 +36,12 @@ const Shop = ({ products = [], customization = {} }) => {
         setSelectedProduct(product);
         setShowProductModal(true);
     };
-    const handleAddToCart = () => {
-        console.log(`Adding product ${selectedProduct?.name} to cart`);
+
+    const handleAddToCart = (product, quantity = 1) => {
+        if (product) addToCart(product, quantity);
     };
 
-    const normalizedCustomization = normalizeConfig(customization);
-
-    const activeDeviceSettings = normalizedCustomization[activeDevice] || normalizedCustomization.desktop;
+    const activeDeviceSettings = customization[activeDevice] || customization.desktop;
     const itemsPerPage = Math.max(1, (activeDeviceSettings?.columns) * (activeDeviceSettings?.rowsPerPage));
     useEffect(() => {
         setCurrentPage(1);
@@ -87,8 +78,8 @@ const Shop = ({ products = [], customization = {} }) => {
 
     return (
         <>
-        <div className="flex flex-col items-center">
-            <div  className="border border-gray-300 bg-white rounded-lg p-3 sm:p-6 min-h-[400px] w-full transition-all duration-300 w-full" >
+        <div className="flex flex-col items-center p-8">
+            <div  className="p-3 sm:p-6 min-h-[400px] w-full transition-all duration-300 w-full" >
                 {/* Products Grid */}
                 <>
                     <div className="mb-4">
@@ -107,7 +98,7 @@ const Shop = ({ products = [], customization = {} }) => {
                             selectedItems={selectedCategories}
                             onItemClick={toggleCategory}
                             onClearFilters={() => setSelectedCategories([])}
-                            selectedChipColor={normalizedCustomization.selectedChipColor }
+                            selectedChipColor={customization.selectedChipColor }
                         />
                     )}
 
@@ -120,10 +111,10 @@ const Shop = ({ products = [], customization = {} }) => {
                             <ProductCard 
                                 key={product.id} 
                                 product={product} 
-                                customization={normalizedCustomization}
+                                customization={customization}
                                 activeDevice={activeDevice}
                                 onClick={() => handleProductClick(product)}
-                                onAddToCart={handleAddToCart}
+                                onAddToCart={(quantity) => handleAddToCart(product, quantity)}
                             />
                         ))}
                     </div>
@@ -139,9 +130,9 @@ const Shop = ({ products = [], customization = {} }) => {
             isOpen={showProductModal}
             onClose={() => setShowProductModal(false)}
             product={selectedProduct}
-            customization={normalizedCustomization}
+            customization={customization}
             activeDevice={activeDevice}
-            onAddToCart={handleAddToCart}
+            onAddToCart={(quantity) => handleAddToCart(selectedProduct, quantity)}
         />
     </>
     );

@@ -111,7 +111,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                 <div className="md:w-1/2 md:h-full flex-shrink-0">
                     <div className="relative w-full h-72 md:h-full bg-gray-100 rounded-lg overflow-hidden p-4 md:p-6">
                         <img 
-                            src={`${apiUrl}/${currentImage}`} 
+                            src={`${currentImage ? `${apiUrl}/${currentImage}` : ''}`} 
                             alt={product.name}
                             className="w-full h-full object-contain"
                         />
@@ -295,7 +295,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                             onClick={() => {
                                 if (!currentInStock) return;
                                 setIsJustAdded(true);
-                                onAddToCart?.(product, quantity);
+                                onAddToCart?.(quantity);
                             }}
                             disabled={!currentInStock}
                         >

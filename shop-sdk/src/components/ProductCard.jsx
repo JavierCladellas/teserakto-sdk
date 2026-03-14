@@ -33,7 +33,7 @@ const ProductCard = ({ product, customization, activeDevice = 'desktop', onClick
         }
         if (!inStock) return;
         setIsJustAdded(true);
-        onAddToCart?.(product, 1);
+        onAddToCart?.(1);
     };
 
     return (

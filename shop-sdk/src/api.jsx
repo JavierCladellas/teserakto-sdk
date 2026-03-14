@@ -20,7 +20,7 @@ export async function fetchProducts(apiKey) {
  * @param {string} apiKey
  */
 export async function fetchCustomization(apiKey) {
-  const res = await fetch(`${API_URL}/storefront/customization/storefront/default`, {
+  const res = await fetch(`${API_URL}/storefront/customization`, {
     method: "GET",
     headers: { Authorization: `Bearer ${apiKey}` },
   });
