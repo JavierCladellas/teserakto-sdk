@@ -55,12 +55,13 @@ const Cart = ({ cartCustomization = {} }) => {
             </button>
             {showDrawer && (
                 <div
-                    className="absolute z-30 shadow-md pointer-events-auto overflow-y-auto"
+                    className="fixed z-30 shadow-md pointer-events-auto overflow-y-auto"
                     style={{
-                        width: drawerWidth,
+                        top: 0,
+                        width: isFullDrawer ? '100vw' : drawerWidth,
                         ...(isFullDrawer
-                            ? { left: 0, right: 0 }
-                            : { [drawerPosition === 'right' ? 'right' : 'left']: 0 }),
+                        ? { left: 0 } // full drawer
+                        : { [drawerPosition === 'right' ? 'right' : 'left']: 0 }),
                     }}
                 >
                     <CartContent 

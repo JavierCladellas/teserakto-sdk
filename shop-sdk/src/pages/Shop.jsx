@@ -132,7 +132,7 @@ const Shop = ({ products = [],customization = {} }) => {
             product={selectedProduct}
             customization={customization}
             activeDevice={activeDevice}
-            onAddToCart={(quantity) => handleAddToCart(selectedProduct, quantity)}
+            onAddToCart={(variant, quantity) => handleAddToCart(variant, quantity)}
         />
     </>
     );

@@ -13,7 +13,7 @@ const CartContent = ({ products, cartCustomization, deviceSettings, onClose, onR
     const subtotalLabelFontSize = deviceSettings.subtotalLabelFontSize;
     const buttonFontSize = deviceSettings.buttonFontSize;
     const showThumbnails = deviceSettings.showThumbnails;
-    const subtotal = products.reduce((sum, p) => sum + Number(p.variants?.[0]?.price ?? 0), 0);
+    const subtotal = products.reduce((sum, p) => sum + Number(p?.price ?? 0), 0);
 
     return (
         <div className="flex flex-col" style={{ backgroundColor, fontFamily }}>

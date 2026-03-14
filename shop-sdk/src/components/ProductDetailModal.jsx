@@ -295,7 +295,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                             onClick={() => {
                                 if (!currentInStock) return;
                                 setIsJustAdded(true);
-                                onAddToCart?.(quantity);
+                                onAddToCart?.(selectedVariant, quantity);
                             }}
                             disabled={!currentInStock}
                         >
