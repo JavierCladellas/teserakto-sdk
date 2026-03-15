@@ -11,6 +11,7 @@ const CheckoutPayment = ({ settings, deviceSettings }) => {
                 style={{ fontSize: deviceSettings.titleFontSize }}
             >{settings.paymentHeading}</h2>
             <div className="mb-4 flex gap-4">
+                <input type="hidden" name="payment_method" value={paymentMethod} />
                 {settings.allowBankTransfer !== false && (
                     <>
                         <button
