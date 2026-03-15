@@ -1,16 +1,15 @@
 {
   "name": "teserakto-shop",
   "version": "1.0.0",
-  "main": "dist/shop-widget.umd.js",
-  "module": "dist/shop-widget.es.js",
+  "main": "dist/teserakto-shop.es.js",
+  "module": "dist/teserakto-shop.es.js",
   "description": "Shop SDK for Teserakto",
   "license": "MIT",
   "author": "Javier Cladellas",
-  "type": "commonjs",
-   "exports": {
+  "type": "module",
+  "exports": {
     ".": {
-      "import": "./dist/shop-widget.es.js",
-      "require": "./dist/shop-widget.umd.js"
+      "import": "./dist/teserakto-shop.es.js"
     }
   },
   "files": ["dist"],
