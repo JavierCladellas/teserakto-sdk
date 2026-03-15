@@ -8,7 +8,8 @@ const CheckoutDelivery = ({ settings, deviceSettings }) => {
     const [deliveryMethod, setDeliveryMethod] = useState("delivery");
 
     //Today
-    const [date, setDate] = useState();
+    const [date, setDate] = useState(new Date());
+    const [timeSlot, setTimeSlot] = useState("morning");
     
     return (
         <section className="mb-8">
@@ -73,7 +74,7 @@ const CheckoutDelivery = ({ settings, deviceSettings }) => {
                         <DateField value={date} onChange={setDate} label={settings.deliveryDeliveryDateLabel} placeholder="DD-MM-YYYY" style={{ fontSize: deviceSettings.formFieldFontSize }} />
                         
                         {/* BUG THIS IS NOT WORKING */}
-                        <SearchableDropdown name="abc" label={settings.deliveryTimeSlotLabel} placeholder="10:00-12:00" value="morning" options={[
+                        <SearchableDropdown label={settings.deliveryTimeSlotLabel}  value={timeSlot} onChange={e => setTimeSlot(e.target.value)} options={[
                             { label: "Morning (9AM-12PM)", value: "morning" },
                             { label: "Afternoon (12PM-5PM)", value: "afternoon" },
                             { label: "Evening (5PM-8PM)", value: "evening" },
