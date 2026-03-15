@@ -6,6 +6,10 @@ const CheckoutSummary = ({ customization, deviceSettings, activeTab, goToNextSte
     const summaryWidth = Math.min(70, Math.max(30, Number(deviceSettings.summaryWidth ?? 45)));
     const subtotal = cart.reduce((sum, product) => sum + Number(product.price || 0), 0);
 
+    {/* TODO: Implement shipping cost calculation */}
+    const shippingCost = 0;
+    const total = subtotal + shippingCost;
+
 
     return (
         <div
@@ -31,9 +35,18 @@ const CheckoutSummary = ({ customization, deviceSettings, activeTab, goToNextSte
                     </div>
                 ))}
             </div>
-            <div className="border-t pt-3 flex justify-between font-semibold mb-4" style={{ fontSize: deviceSettings.textFontSize }}>
-                <span>{customization.totalLabelText}</span>
+            <div className="border-t pt-3 flex justify-between mb-4 border-gray-300" style={{ fontSize: deviceSettings.textFontSize }}>
+                <span>{customization.subtotalLabelText || "Subtotal"}</span>
                 <span style={{ color: customization.accentColor }}>${subtotal.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between mb-4" style={{ fontSize: deviceSettings.textFontSize }}>
+                <span>{customization.shippingLabelText || "Shipping"}</span>
+                <span style={{ color: customization.accentColor }}>${shippingCost.toFixed(2)}</span>
+            </div>
+
+            <div className="border-t pt-3 flex justify-between font-semibold mb-4 border-gray-300" style={{ fontSize: deviceSettings.textFontSize }}>
+                <span>{customization.totalLabelText}</span>
+                <span style={{ color: customization.accentColor }}>${total.toFixed(2)}</span>
             </div>
             {/* Show Place Order button only in payment step, Next button otherwise */}
             {activeTab === "payment" ? (
