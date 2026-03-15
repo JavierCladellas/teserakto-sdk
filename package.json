@@ -1,11 +1,23 @@
 {
-  "name": "shop-sdk",
+  "name": "teserakto-shop",
   "version": "1.0.0",
+  "main": "dist/shop-widget.umd.js",
+  "module": "dist/shop-widget.es.js",
   "description": "Shop SDK for Teserakto",
-  "license": "ISC",
+  "license": "MIT",
   "author": "Javier Cladellas",
   "type": "commonjs",
-  "main": "index.js",
+   "exports": {
+    ".": {
+      "import": "./dist/shop-widget.es.js",
+      "require": "./dist/shop-widget.umd.js"
+    }
+  },
+  "files": ["dist"],
+  "peerDependencies": {
+    "react": "^18",
+    "react-dom": "^18"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -17,7 +29,8 @@
     "react": "^18.3.1",
     "react-datepicker": "^9.1.0",
     "react-dom": "^18.3.1",
-    "react-icons": "^5.6.0"
+    "react-icons": "^5.6.0",
+    "react-select-country-list": "^2.2.3"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^6.0.1",
