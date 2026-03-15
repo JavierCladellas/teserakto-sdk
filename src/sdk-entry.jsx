@@ -87,7 +87,6 @@ async function initCheckout(apiKey) {
         const [customization] = await Promise.all([
             fetchCustomization(apiKey),
         ]);
-        console.log(customization);
 
         const checkoutRoot = ReactDOM.createRoot(checkoutContainer);
         const checkoutCustomization = normalizeConfig(customization.filter(c => c.context_type === 'checkout' && c.context_key === "default")?.[0]);

@@ -3,12 +3,9 @@ import CheckoutTabs from "../components/CheckoutTabs";
 import CheckoutPersonalInfo from "../components/CheckoutPersonalInfo";
 import CheckoutDelivery from "../components/CheckoutDelivery";
 import useWindowDimensions from "../hooks/useScreenWidth";
-import useCart from "../hooks/useCart";
 import CheckoutPayment from "../components/CheckoutPayment";
 import CheckoutGifts from "../components/CheckoutGifts";
-
-// Dynamically build stepTabs based on enableGiftStep
-
+import CheckoutSummary from "../components/CheckoutSummary";
 
 const getStepTabs = (settings) => {
     const tabs = [
@@ -37,7 +34,6 @@ const Checkout = ({ customization = {}}) => {
 
     
     const deviceSettings = customization[activeDevice] || customization.desktop || {};
-    const { cart } = useCart();
 
     const stepTabs = getStepTabs(customization);
     const [activeTab, setActiveTab] = useState(stepTabs[0].key);
@@ -47,9 +43,6 @@ const Checkout = ({ customization = {}}) => {
             setActiveTab(stepTabs[idx + 1].key);
         }
     };
-
-    const summaryWidth = Math.min(70, Math.max(30, Number(deviceSettings.summaryWidth ?? 45)));
-    const subtotal = cart.reduce((sum, product) => sum + Number(product.price || 0), 0);
 
     return (
         <div
@@ -66,7 +59,7 @@ const Checkout = ({ customization = {}}) => {
                     customization[activeDevice]?.layoutMode === 'column' ? 'flex flex-col' : 'flex flex-col sm:flex-row'
                 }`}
             >
-                <div className="flex-1">
+                <div className="flex-1 rounded-lg border border-gray-200 p-4" style={{ backgroundColor: customization.panelColor }}>
                     {activeTab === "personal" && (
                         <CheckoutPersonalInfo settings={customization} deviceSettings={deviceSettings} />
                     )}
@@ -83,62 +76,7 @@ const Checkout = ({ customization = {}}) => {
 
                 </div>
 
-                {/* Order summary right, always visible */}
-                <div
-                    className={`rounded-lg border border-gray-200 p-4 flex flex-col h-full ${
-                        (deviceSettings.layoutMode) === 'column' ? 'w-full min-w-0' : ''
-                    }`}
-                    style={{
-                        backgroundColor: customization.panelColor,
-                        width: (deviceSettings.layoutMode) === 'column' ? '100%' : `${summaryWidth}%`,
-                    }}
-                >
-                    <h3 className="font-semibold mb-3" style={{ fontSize: Math.max(14, deviceSettings.titleFontSize) }}>
-                        {customization.summaryTitleText}
-                    </h3>
-                    <div className="space-y-2 mb-4" style={{ fontSize: deviceSettings.textFontSize }}>
-                        {cart.map((product) => (
-                            <div key={product.id} className="flex justify-between gap-2">
-                                <div>
-                                    <span style={{ color: customization.textColor }}>{product.quantity} x </span>
-                                    <span className="truncate">{product.name}</span>
-                                </div>
-                                <span style={{ color: customization.accentColor }}>${Number(product?.price).toFixed(2)}</span>
-                            </div>
-                        ))}
-                    </div>
-                    <div className="border-t pt-3 flex justify-between font-semibold mb-4" style={{ fontSize: deviceSettings.textFontSize }}>
-                        <span>{customization.totalLabelText}</span>
-                        <span style={{ color: customization.accentColor }}>${subtotal.toFixed(2)}</span>
-                    </div>
-                    {/* Show Place Order button only in payment step, Next button otherwise */}
-                    {activeTab === "payment" ? (
-                        <button
-                            type="button"
-                            className="transition select-none flex items-center justify-center px-6 py-3 rounded-md"
-                            style={{
-                                backgroundColor: customization.primaryButtonColor,
-                                color: customization.primaryButtonTextColor,
-                                fontSize: deviceSettings.buttonFontSize,
-                            }}
-                        >  
-                            {customization.placeOrderText}
-                        </button>
-                    ) : (
-                        <button
-                            type="button"
-                            className="transition select-none flex items-center justify-center px-6 py-3 rounded-md"
-                            onClick={goToNextStep}
-                            style={{
-                                backgroundColor: customization.primaryButtonColor,
-                                color: customization.primaryButtonTextColor,
-                                fontSize: deviceSettings.buttonFontSize,
-                            }}
-                        >
-                            {customization.nextBtnText}
-                        </button>
-                    )}
-                </div>
+                <CheckoutSummary customization={customization} deviceSettings={deviceSettings} activeTab={activeTab} goToNextStep={goToNextStep} />
             </div>
         </div>
     );
