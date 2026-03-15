@@ -49,7 +49,7 @@ const Checkout = ({ customization = {}}) => {
     };
 
     const summaryWidth = Math.min(70, Math.max(30, Number(deviceSettings.summaryWidth ?? 45)));
-    const subtotal = cart.reduce((sum, product) => sum + Number(product.variants?.[0]?.price ?? 0), 0);
+    const subtotal = cart.reduce((sum, product) => sum + Number(product.price || 0), 0);
 
     return (
         <div
@@ -99,8 +99,11 @@ const Checkout = ({ customization = {}}) => {
                     <div className="space-y-2 mb-4" style={{ fontSize: deviceSettings.textFontSize }}>
                         {cart.map((product) => (
                             <div key={product.id} className="flex justify-between gap-2">
-                                <span className="truncate">{product.name}</span>
-                                <span style={{ color: customization.accentColor }}>${Number(product.variants?.[0]?.price ?? 0).toFixed(2)}</span>
+                                <div>
+                                    <span style={{ color: customization.textColor }}>{product.quantity} x </span>
+                                    <span className="truncate">{product.name}</span>
+                                </div>
+                                <span style={{ color: customization.accentColor }}>${Number(product?.price).toFixed(2)}</span>
                             </div>
                         ))}
                     </div>
