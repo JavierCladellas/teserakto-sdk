@@ -1,5 +1,5 @@
 
-const apiUrl = import.meta.env.VITE_API_URL;
+const apiUrl = import.meta.env.VITE_TESERAKTO_API_URL;
 
 const ProductThumbnail = ({ product, size }) => {
     const imageUrl = product.image_url ? `${apiUrl}/${product.image_url}` : product.variants?.[0]?.image_url ? `${apiUrl}/${product.variants[0].image_url}` : null;

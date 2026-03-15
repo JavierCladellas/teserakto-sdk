@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from 'react';
 
-const apiUrl = import.meta.env.VITE_API_URL;
+const apiUrl = import.meta.env.VITE_TESERAKTO_API_URL;
 
 const ProductCard = ({ product, customization, activeDevice = 'desktop', onClick, onAddToCart }) => {
     const [isJustAdded, setIsJustAdded] = useState(false);

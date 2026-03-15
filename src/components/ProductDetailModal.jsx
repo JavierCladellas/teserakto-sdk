@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Modal from './Modal';
 
-const apiUrl = import.meta.env.VITE_API_URL;
+const apiUrl = import.meta.env.VITE_TESERAKTO_API_URL;
 
 const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDevice = 'desktop', onAddToCart }) => {
     const [selectedVariant, setSelectedVariant] = useState(product?.variants?.[0] || null);
