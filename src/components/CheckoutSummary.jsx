@@ -36,11 +36,11 @@ const CheckoutSummary = ({ customization, deviceSettings, activeTab, goToNextSte
                 ))}
             </div>
             <div className="border-t pt-3 flex justify-between mb-4 border-gray-300" style={{ fontSize: deviceSettings.textFontSize }}>
-                <span>{customization.subtotalLabelText || "Subtotal"}</span>
+                <span>{customization.subtotalLabelText}</span>
                 <span style={{ color: customization.accentColor }}>${subtotal.toFixed(2)}</span>
             </div>
             <div className="flex justify-between mb-4" style={{ fontSize: deviceSettings.textFontSize }}>
-                <span>{customization.shippingLabelText || "Shipping"}</span>
+                <span>{customization.shippingLabelText}</span>
                 <span style={{ color: customization.accentColor }}>${shippingCost.toFixed(2)}</span>
             </div>
 
