@@ -8,7 +8,7 @@ import useCart from "../hooks/useCart";
 
 
 
-const Shop = ({ products = [],customization = {} }) => {
+const Shop = ({ products = [], globalCustomization = {}, shopCustomization = {} }) => {
     const [activeDevice, setActiveDevice] = useState('desktop');
     const { width } = useWindowDimensions();
 
@@ -41,7 +41,7 @@ const Shop = ({ products = [],customization = {} }) => {
         if (product) addToCart(product, quantity);
     };
 
-    const activeDeviceSettings = customization[activeDevice] || customization.desktop;
+    const activeDeviceSettings = shopCustomization[activeDevice] || shopCustomization.desktop;
     const itemsPerPage = Math.max(1, (activeDeviceSettings?.columns) * (activeDeviceSettings?.rowsPerPage));
     useEffect(() => {
         setCurrentPage(1);
@@ -98,7 +98,7 @@ const Shop = ({ products = [],customization = {} }) => {
                             selectedItems={selectedCategories}
                             onItemClick={toggleCategory}
                             onClearFilters={() => setSelectedCategories([])}
-                            selectedChipColor={customization.selectedChipColor }
+                            selectedChipColor={globalCustomization.primaryBtnColor }
                         />
                     )}
 
@@ -111,7 +111,8 @@ const Shop = ({ products = [],customization = {} }) => {
                             <ProductCard 
                                 key={product.id} 
                                 product={product} 
-                                customization={customization}
+                                globalCustomization={globalCustomization}
+                                shopCustomization={shopCustomization}
                                 activeDevice={activeDevice}
                                 onClick={() => handleProductClick(product)}
                                 onAddToCart={(quantity) => handleAddToCart(product, quantity)}
@@ -130,7 +131,8 @@ const Shop = ({ products = [],customization = {} }) => {
             isOpen={showProductModal}
             onClose={() => setShowProductModal(false)}
             product={selectedProduct}
-            customization={customization}
+            globalCustomization={globalCustomization}
+            shopCustomization={shopCustomization}
             activeDevice={activeDevice}
             onAddToCart={(variant, quantity) => handleAddToCart(variant, quantity)}
         />

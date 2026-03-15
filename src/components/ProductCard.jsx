@@ -3,18 +3,17 @@ import { useEffect, useState } from 'react';
 
 const apiUrl = import.meta.env.VITE_TESERAKTO_API_URL;
 
-const ProductCard = ({ product, customization, activeDevice = 'desktop', onClick, onAddToCart }) => {
+const ProductCard = ({ product, globalCustomization, shopCustomization, activeDevice = 'desktop', onClick, onAddToCart }) => {
     const [isJustAdded, setIsJustAdded] = useState(false);
     const variant = product.variants?.[0];
     const price = variant?.price;
     const inStock = (product.is_variable ? true : product.has_stock);
 
-    const deviceSettings = customization[activeDevice] || customization.desktop || {};
+    const deviceSettings = shopCustomization[activeDevice] || shopCustomization.desktop || {};
     const titleFontSize = deviceSettings.titleFontSize ;
     const descriptionFontSize = deviceSettings.descriptionFontSize;
     const priceFontSize = deviceSettings.priceFontSize;
     const buttonFontSize = deviceSettings.buttonFontSize;
-
     useEffect(() => {
         if (!isJustAdded) return;
 
@@ -40,8 +39,8 @@ const ProductCard = ({ product, customization, activeDevice = 'desktop', onClick
             <div 
                 className="group flex flex-col h-full relative bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer"
                 style={{ 
-                    backgroundColor: customization.cardBgColor,
-                    fontFamily: customization.fontFamily 
+                    backgroundColor: globalCustomization.surfaceColor,
+                    fontFamily: globalCustomization.fontFamily 
                 }}
                 onClick={onClick}
             >
@@ -63,8 +62,8 @@ const ProductCard = ({ product, customization, activeDevice = 'desktop', onClick
             {!inStock && (
                 <>
                     <div className="absolute inset-0 bg-white/60 pointer-events-none z-10"></div>
-                    <div className="absolute top-2 left-2 text-white text-xs px-2 py-1 rounded z-10" style={{ backgroundColor: customization.outOfStockColor }}>
-                        {customization.outOfStockText}
+                    <div className="absolute top-2 left-2 text-white text-xs px-2 py-1 rounded z-10" style={{ backgroundColor: globalCustomization.notificationColor }}>
+                        {shopCustomization.outOfStockText}
                     </div>
                 </>
             )}
@@ -75,7 +74,7 @@ const ProductCard = ({ product, customization, activeDevice = 'desktop', onClick
                     <h3 
                         className="font-semibold text-lg mb-2 truncate"
                         style={{ 
-                            color: customization.titleColor,
+                            color: globalCustomization.textColor,
                             fontSize: `${titleFontSize}px`
                         }}
                     >
@@ -85,7 +84,7 @@ const ProductCard = ({ product, customization, activeDevice = 'desktop', onClick
                     <p 
                         className="text-sm mb-3 line-clamp-2"
                         style={{ 
-                            color: customization.textColor,
+                            color: globalCustomization.textColor,
                             fontSize: `${descriptionFontSize}px`
                         }}
                     >
@@ -100,7 +99,7 @@ const ProductCard = ({ product, customization, activeDevice = 'desktop', onClick
                     <span 
                         className="text-md font-bold"
                         style={{ 
-                            color: customization.priceColor,
+                            color: globalCustomization.accentColor,
                             fontSize: `${priceFontSize}px`
                         }}
                     >
@@ -112,17 +111,17 @@ const ProductCard = ({ product, customization, activeDevice = 'desktop', onClick
                         }`}
                         onClick={handleAddToCartClick}
                         style={{ 
-                            backgroundColor: customization.buttonColor,
-                            color: customization.buttonTextColor,
+                            backgroundColor: globalCustomization.primaryBtnColor,
+                            color: globalCustomization.primaryBtnTextColor,
                             fontSize: `${buttonFontSize}px`
                         }}
                         disabled={!inStock}
                     >
                         {inStock
                             ? (
-                                !product.is_variable && isJustAdded ? (customization.addedToCartText) : (customization.addToCartText)
+                                !product.is_variable && isJustAdded ? (shopCustomization.addedToCartText) : (shopCustomization.addToCartText)
                             )
-                            : (customization.outOfStockText)}
+                            : (shopCustomization.outOfStockText)}
                     </button>
                 </div>
             </div>

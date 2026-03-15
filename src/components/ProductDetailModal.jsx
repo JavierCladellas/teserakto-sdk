@@ -3,7 +3,7 @@ import Modal from './Modal';
 
 const apiUrl = import.meta.env.VITE_TESERAKTO_API_URL;
 
-const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDevice = 'desktop', onAddToCart }) => {
+const ProductDetailModal = ({ isOpen, onClose, product, globalCustomization, shopCustomization, activeDevice = 'desktop', onAddToCart }) => {
     const [selectedVariant, setSelectedVariant] = useState(product?.variants?.[0] || null);
     const [selectedAttributes, setSelectedAttributes] = useState({});
     const [quantityInput, setQuantityInput] = useState(1);
@@ -41,12 +41,12 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
 
     if (!product) return null;
 
-    const deviceSettings = customization[activeDevice] || customization.desktop || {};
+    const deviceSettings = shopCustomization[activeDevice] || shopCustomization.desktop || {};
     const quantity = Math.max(1, parseInt(quantityInput, 10) || 1);
 
     const currentInStock = (product.is_variable ? selectedVariant?.has_stock : product.has_stock);
     const currentImage = product.image_url || selectedVariant?.image_url;
-    const currentPrice = selectedVariant?.price ;
+    const currentPrice = selectedVariant?.price;
 
     // Get all unique attributes from all variants
     const getProductAttributes = () => {
@@ -104,12 +104,12 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
     return (
         <Modal open={isOpen} onClose={onClose} size="lg">
             <div 
-                className="flex flex-col md:flex-row gap-6 md:h-[68vh] md:max-h-[68vh]"
-                style={{ fontFamily: customization.fontFamily }}
+                className="flex flex-col sm:flex-row gap-6 items-center "
+                style={{ fontFamily: globalCustomization.fontFamily }}
             >
                 {/* Product Image */}
-                <div className="md:w-1/2 md:h-full flex-shrink-0">
-                    <div className="relative w-full h-72 md:h-full bg-gray-100 rounded-lg overflow-hidden p-4 md:p-6">
+                <div className="w-1/2 sm:w-full h-full flex-shrink-0">
+                    <div className="relative w-full h-72 sm:h-full bg-gray-100 rounded-lg  p-4 sm:p-6">
                         <img 
                             src={`${currentImage ? `${apiUrl}/${currentImage}` : ''}`} 
                             alt={product.name}
@@ -117,20 +117,19 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                         />
                         {!currentInStock && (
                             <div className="absolute inset-0 bg-white/60 flex items-center justify-center">
-                                <span className="text-lg font-semibold" style={{ color: customization.outOfStockColor }}>{customization.outOfStockText }</span>
+                                <span className="text-lg font-semibold" style={{ color: globalCustomization.notificationColor }}>{shopCustomization.outOfStockText }</span>
                             </div>
                         )}
                     </div>
                 </div>
 
                 {/* Product Details */}
-                <div className="md:w-1/2 flex flex-col md:h-full min-h-0 md:relative">
-                    <div className="min-h-0 overflow-y-auto pr-1 md:pb-40">
-                        {/* Title */}
+                <div className="w-full flex flex-col h-full min-h-0 relative">
+                    <div className="min-h-0 overflow-y-auto pr-1 sm:pb-40">
                         <h2 
                             className="font-bold mb-2"
                             style={{ 
-                                color: customization.titleColor,
+                                color: globalCustomization.textColor,
                                 fontSize: `${deviceSettings.titleFontSize}px`
                             }}
                         >
@@ -149,7 +148,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                             <span 
                                 className="text-2xl font-bold"
                                 style={{ 
-                                    color: customization.priceColor,
+                                    color: globalCustomization.accentColor,
                                     fontSize: `${deviceSettings.priceFontSize}px`
                                 }}
                             >
@@ -162,7 +161,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                                 <h3 
                                     className="font-semibold mb-3"
                                     style={{ 
-                                        color: customization.titleColor,
+                                        color: globalCustomization.textColor,
                                         fontSize: `${deviceSettings.titleFontSize}px`
                                     }}
                                 >
@@ -173,7 +172,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                                         <label 
                                             className="block text-sm font-medium mb-2"
                                             style={{ 
-                                                color: customization.textColor,
+                                                color: globalCustomization.textColor,
                                                 fontSize: `${deviceSettings.descriptionFontSize}px`
                                             }}
                                         >
@@ -190,10 +189,10 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                                                             : 'border-gray-300 hover:border-gray-400'
                                                     }`}
                                                     style={{ 
-                                                        borderColor: selectedAttributes[attribute.id] === value.id ? customization.buttonColor : undefined,
-                                                        color: selectedAttributes[attribute.id] === value.id ? customization.buttonColor : customization.textColor,
+                                                        borderColor: selectedAttributes[attribute.id] === value.id ? globalCustomization.primaryBtnColor : undefined,
+                                                        color: selectedAttributes[attribute.id] === value.id ? globalCustomization.primaryBtnColor : globalCustomization.textColor,
                                                         fontSize: `${deviceSettings.buttonFontSize}px`,
-                                                        backgroundColor: selectedAttributes[attribute.id] === value.id ? `${customization.buttonColor}10` : 'transparent'
+                                                        backgroundColor: selectedAttributes[attribute.id] === value.id ? `${globalCustomization.primaryBtnColor}10` : 'transparent'
                                                     }}
                                                 >
                                                     {value.value}
@@ -210,7 +209,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                             <h3 
                                 className="font-semibold mb-2"
                                 style={{ 
-                                    color: customization.titleColor,
+                                    color: globalCustomization.textColor,
                                     fontSize: `${deviceSettings.titleFontSize}px`
                                 }}
                             >
@@ -219,7 +218,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                             <p 
                                 className="text-gray-700"
                                 style={{ 
-                                    color: customization.textColor,
+                                    color: globalCustomization.textColor,
                                     fontSize: `${deviceSettings.descriptionFontSize}px`,
                                     whiteSpace: 'pre-wrap',
                                     wordWrap: 'break-word'
@@ -239,7 +238,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                                 <h3 
                                     className="font-semibold mb-2"
                                     style={{ 
-                                        color: customization.titleColor,
+                                        color: globalCustomization.textColor,
                                         fontSize: `${deviceSettings.titleFontSize}px`
                                     }}
                                 >
@@ -249,7 +248,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                                     <button
                                         onClick={() => setQuantityInput(String(Math.max(1, quantity - 1)))}
                                         className="w-10 h-10 rounded-md border-2 border-gray-300 hover:border-gray-400 flex items-center justify-center font-semibold"
-                                        style={{ color: customization.textColor }}
+                                        style={{ color: globalCustomization.textColor }}
                                     >
                                         −
                                     </button>
@@ -269,14 +268,14 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                                         className="w-20 h-10 text-center border-2 border-gray-300 rounded-md appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                                         style={{ 
                                             fontSize: `${deviceSettings.buttonFontSize }px`,
-                                            color: customization.textColor
+                                            color: globalCustomization.textColor
                                         }}
                                         min="1"
                                     />
                                     <button
                                         onClick={() => setQuantityInput(String(quantity + 1))}
                                         className="w-10 h-10 rounded-md border-2 border-gray-300 hover:border-gray-400 flex items-center justify-center font-semibold"
-                                        style={{ color: customization.textColor }}
+                                        style={{ color: globalCustomization.textColor }}
                                     >
                                         +
                                     </button>
@@ -288,8 +287,8 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                         <button
                             className="w-full py-3 rounded-md text-white font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                             style={{ 
-                                backgroundColor: customization.buttonColor,
-                                color: customization.buttonTextColor,
+                                backgroundColor: globalCustomization.primaryBtnColor,
+                                color: globalCustomization.primaryBtnTextColor,
                                 fontSize: `${deviceSettings.buttonFontSize}px`
                             }}
                             onClick={() => {
@@ -302,9 +301,9 @@ const ProductDetailModal = ({ isOpen, onClose, product, customization, activeDev
                         >
                             {currentInStock
                                 ? (isJustAdded
-                                    ? (customization.addedToCartText)
-                                    : `${customization.addToCartText}${quantity > 1 ? ` (${quantity})` : ''}`)
-                                : (customization.outOfStockText)}
+                                    ? (shopCustomization.addedToCartText)
+                                    : `${shopCustomization.addToCartText}${quantity > 1 ? ` (${quantity})` : ''}`)
+                                : (shopCustomization.outOfStockText)}
                         </button>
                     </div>
                 </div>

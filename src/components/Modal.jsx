@@ -1,44 +1,71 @@
-import { useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 
-const Modal = ({ open, onClose, title, children, size = "md" }) => {
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === "Escape") onClose();
+const Modal = ({ open, onClose, title, children, size }) => {
+    const backdropRef = useRef(null);
+
+    const sizeClasses = {
+        sm: "max-w-md",
+        md: "max-w-2xl",
+        lg: "max-w-4xl",
+        xl: "max-w-6xl",
     };
-    if (open) document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [open, onClose]);
 
-  if (!open) return null;
+    useEffect(() => {
+        if (!open) return;
 
-  const sizeClasses = {
-    sm: "max-w-md",
-    md: "max-w-2xl",
-    lg: "max-w-4xl",
-    xl: "max-w-6xl",
-  };
+        const handleKeyDown = (e) => {
+            if (e.key === "Escape") onClose();
+        };
 
-  return (
-    <div
-      className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onClose(); // only close on backdrop
-      }}
-    >
-      <div
-        className={`bg-white rounded-xl shadow-lg w-full ${sizeClasses[size]} max-h-[90vh] overflow-y-auto p-6`}
-      >
-        <div className="flex justify-between items-center mb-4">
-          { title  ? <h2 className="text-xl font-bold">{title}</h2> : <div></div>}
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-800">
-            ✕
-          </button>
-        </div>
-        <div>{children}</div>
-        <div className="w-full h-4"> </div>
-      </div>
-    </div>
-  );
+        document.addEventListener("keydown", handleKeyDown);
+        return () => document.removeEventListener("keydown", handleKeyDown);
+    }, [open, onClose]);
+
+    const handleBackdropClick = (e) => {
+        // Only close if the click target is the backdrop itself
+        if (e.target === backdropRef.current) {
+            onClose();
+        }
+    };
+
+    const modalContent = (
+        <AnimatePresence>
+            {open && (
+                <motion.div 
+                    ref={backdropRef}
+                    initial={{ opacity: 0 }} 
+                    animate={{ opacity: 1 }} 
+                    exit={{ opacity: 0 }} 
+                    onMouseDown={handleBackdropClick}
+                    className="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-[100] p-2 sm:p-6"
+                >
+                    <motion.div 
+                        initial={{ scale: 0.9, opacity: 0 }} 
+                        animate={{ scale: 1, opacity: 1 }} 
+                        exit={{ scale: 0.9, opacity: 0 }}
+                        transition={{ duration: 0.2, ease: "easeOut" }}
+                        className={`bg-white w-full rounded-2xl shadow-xl p-4 sm:p-6 overflow-y-auto max-h-[95vh] min-h-[30vh] ${sizeClasses[size || "md"]}`}
+                    >
+                        <div className="flex justify-between items-center mb-4 gap-2">
+                            <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2 break-words">
+                                {title}
+                            </h2>
+                            <button onClick={onClose} className="text-gray-400 hover:text-gray-700 text-xl" >
+                                ✕
+                            </button>
+                        </div>
+                        {children}
+                    </motion.div>
+                </motion.div>
+            )}
+        </AnimatePresence>
+    );
+
+    if (typeof document === "undefined") return null;
+
+    return createPortal(modalContent, document.body);
 };
 
 export default Modal;
