@@ -78,7 +78,7 @@ const Shop = ({ products = [],customization = {} }) => {
 
     return (
         <>
-        <div className="flex flex-col items-center p-8">
+        <div className="flex flex-col items-center p-2">
             <div  className="p-3 sm:p-6 min-h-[400px] w-full transition-all duration-300 w-full" >
                 {/* Products Grid */}
                 <>
