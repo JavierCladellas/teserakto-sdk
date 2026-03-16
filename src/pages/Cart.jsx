@@ -41,16 +41,23 @@ const Cart = ({ globalCustomization = {}, cartCustomization = {}, checkoutUrl, d
 
     return (
         <div className="relative w-full h-full mx-auto rounded-lg" >
-            <button onClick={( e) => {e.stopPropagation(); setShowDrawer(!showDrawer)}} >
-                <FaShoppingCart size={22} style={{ color: "black" }} />
-                <span
-                    className="absolute -top-2 -right-2 text-[10px] font-semibold rounded-full min-w-4 h-4 px-1 flex items-center justify-center"
-                    style={{
-                        backgroundColor: globalCustomization?.notificationColor,
-                        color: globalCustomization?.primaryBtnTextColor,
-                    }}
-                >
-                    {cartCount}
+            <button 
+                className="relative"
+                onClick={( e) => {e.stopPropagation(); setShowDrawer(!showDrawer)}} 
+            >
+                <span className="relative inline-flex items-center justify-center w-6 h-6">
+                    <FaShoppingCart size={22} style={{ color: "black" }} />
+                    <span
+                        className="absolute -top-1 -right-1 
+                            w-4 h-4 text-[10px] font-semibold rounded-full
+                            flex items-center justify-center"
+                        style={{
+                            backgroundColor: globalCustomization?.notificationColor,
+                            color: globalCustomization?.primaryBtnTextColor,
+                        }}
+                    >
+                        {cartCount}
+                    </span>
                 </span>
             </button>
             {showDrawer && (
