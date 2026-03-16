@@ -35,8 +35,7 @@ const Cart = ({ globalCustomization = {}, cartCustomization = {}, checkoutUrl, d
     }, [cart]);
 
     const deviceSettings = cartCustomization[activeDevice] || cartCustomization.desktop || {};
-    const isFullDrawer = activeDevice === 'phone' || deviceSettings?.drawerPosition === 'full' || deviceSettings.drawerWidth === 0;
-    const drawerWidth = isFullDrawer ? '100%' : `${deviceSettings.drawerWidth}px`;
+    const drawerWidth = `${deviceSettings.drawerWidth}px`;
 
 
     return (
@@ -62,11 +61,11 @@ const Cart = ({ globalCustomization = {}, cartCustomization = {}, checkoutUrl, d
             </button>
             {showDrawer && (
                 <div
-                    className="fixed z-30 shadow-md pointer-events-auto overflow-y-auto"
+                    className={`absolute z-30 shadow-md pointer-events-auto overflow-y-auto`}
                     style={{
-                        top: 0,
-                        width: isFullDrawer ? '100vw' : drawerWidth,
-                        ...(isFullDrawer ? { left: 0 }  : { [deviceSettings?.drawerPosition === 'right' ? 'right' : 'left']: 0 }),
+                        top: "calc(100% + 8px)",
+                        width: drawerWidth,
+                        right: 0
                     }}
                 >
                     <CartContent 
