@@ -51,7 +51,7 @@ let defaultGlobalCustomization = null;
 let defaultShopCustomization = null;
 let defaultCartCustomization = null;
 
-async function renderShop() {
+async function renderShop(cartLocalStorageKey) {
     const shopRoot = getShopRoot();
     if (!shopRoot) return;
 
@@ -65,12 +65,13 @@ async function renderShop() {
             globalCustomization={global}
             shopCustomization={shop}
             device={activeDevice}
+            cartLocalStorageKey={cartLocalStorageKey}
         />
     );
 }
 
 
-async function initShop(apiKey) {
+async function initShop(apiKey, cartLocalStorageKey = "teserakto_cart") {
     if (!apiKey) {
         console.error("[TeseraktoShopSDK] No API key provided");
         return;
@@ -93,21 +94,21 @@ async function initShop(apiKey) {
             customization.find(c => c.context_type === "storefront" && c.context_key === "default")
         );
         
-        renderShop();
+        renderShop(cartLocalStorageKey);
 
     } catch (err) {
         console.error("[TeseraktoShopSDK] Failed to initialize shop", err);
     }
 }
 
-function updateShop(globalCustomization, shopCustomization,activeDevice) {
+function updateShop(globalCustomization, shopCustomization,activeDevice,cartLocalStorageKey) {
     overrides.global = globalCustomization;
     overrides.shop = shopCustomization;
     overrides.activeDevice = activeDevice;
 
     if (!shopRoot || shopState.products.length === 0) return;
 
-    renderShop();
+    renderShop(cartLocalStorageKey);
 }
 
 
@@ -127,12 +128,12 @@ function getCartRoot() {
     return cartRoot;
 }
 
-async function renderCart(checkoutUrl) {
+async function renderCart(checkoutUrl, localStorageKey) {
     const cartRoot = getCartRoot();
     if (!cartRoot) return;
 
     const global = overrides.global || defaultGlobalCustomization;
-    const cart = overrides.cart || defaultShopCustomization;
+    const cart = overrides.cart || defaultCartCustomization;
     const activeDevice = overrides.activeDevice || null;
 
     cartRoot.render(
@@ -141,12 +142,13 @@ async function renderCart(checkoutUrl) {
             cartCustomization={cart}
             device={activeDevice}
             checkoutUrl={checkoutUrl}
+            localStorageKey = {localStorageKey}
         />
     );
 }
 
 
-async function initCart(apiKey, checkoutUrl) {
+async function initCart(apiKey, checkoutUrl, cartLocalStorageKey = "teserakto_cart") {
     if (!apiKey) {
         console.error("[TeseraktoShopSDK] No API key provided");
         return;
@@ -164,20 +166,20 @@ async function initCart(apiKey, checkoutUrl) {
             customization.find(c => c.context_type === "cart" && c.context_key === "default")
         );
 
-        renderCart(checkoutUrl);
+        renderCart(checkoutUrl,cartLocalStorageKey);
 
     } catch (err) {
         console.error("[TeseraktoShopSDK] Failed to initialize cart", err);
     }
 }
-function updateCart(globalCustomization, cartCustomization, activeDevice) {
+function updateCart(globalCustomization, cartCustomization, activeDevice,checkoutUrl,cartLocalStorageKey = "teserakto_cart") {
     overrides.global = globalCustomization;
     overrides.cart = cartCustomization;
     overrides.activeDevice = activeDevice;
 
     if (!cartRoot) return;
 
-    renderCart();
+    renderCart(checkoutUrl,cartLocalStorageKey);
 }
 
 

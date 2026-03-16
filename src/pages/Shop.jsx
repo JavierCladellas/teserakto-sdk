@@ -8,7 +8,7 @@ import useCart from "../hooks/useCart";
 
 
 
-const Shop = ({ products = [], globalCustomization = {}, shopCustomization = {}, device = null }) => {
+const Shop = ({ products = [], globalCustomization = {}, shopCustomization = {}, device = null, cartLocalStorageKey = "teserakto_cart" }) => {
     const [activeDevice, setActiveDevice] = useState(device);
     const { width } = useWindowDimensions();
 
@@ -23,7 +23,7 @@ const Shop = ({ products = [], globalCustomization = {}, shopCustomization = {},
         }
     }, [width, activeDevice, device]);
 
-    const { addToCart } = useCart();
+    const { addToCart } = useCart(cartLocalStorageKey);
 
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategories, setSelectedCategories] = useState([]);

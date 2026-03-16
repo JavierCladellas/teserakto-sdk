@@ -1,71 +1,81 @@
 import { useEffect, useState } from "react";
 
-const listeners = new Set();
+function createCartStore(localStorageKey) {
+    const listeners = new Set();
 
-let cart = loadCart();
-
-function loadCart() {
-    const stored = localStorage.getItem("teserakto_cart");
-    return stored ? JSON.parse(stored) : [];
-}
-
-function saveCart() {
-    localStorage.setItem("teserakto_cart", JSON.stringify(cart));
-}
-
-function notify() {
-    listeners.forEach(l => l(cart));
-}
-
-const cartStore = {
-
-    subscribe(listener) {
-        listeners.add(listener);
-        return () => listeners.delete(listener);
-    },
-
-    getCart() {
-        return cart;
-    },
-
-    add(product, quantity = 1) {
-        const existing = cart.find(p => p?.id === product?.id);
-
-        if (existing) {
-            cart = cart.map(p =>
-                p.id === product.id
-                    ? { ...p, quantity: p.quantity + quantity }
-                    : p
-            );
-        } else {
-            cart = [...cart, { ...product, quantity }];
-        }
-
-        saveCart();
-        notify();
-    },
-
-    remove(productId) {
-        cart = cart.filter(p => p?.id !== productId);
-        saveCart();
-        notify();
+    function loadCart() {
+        const stored = localStorage.getItem(localStorageKey);
+        return stored ? JSON.parse(stored) : [];
     }
-};
 
+    let cart = loadCart();
 
-const useCart = () => {
+    function saveCart() {
+        localStorage.setItem(localStorageKey, JSON.stringify(cart));
+    }
 
-    const [cart, setCart] = useState(cartStore.getCart());
-
-    useEffect(() => {
-        return cartStore.subscribe(setCart);
-    }, []);
+    function notify() {
+        listeners.forEach(l => l(cart));
+    }
 
     return {
-        cart,
-        addToCart: cartStore.add,
-        removeFromCart: cartStore.remove
+        subscribe(listener) {
+            listeners.add(listener);
+            return () => listeners.delete(listener);
+        },
+
+        getCart() {
+            return cart;
+        },
+
+        add(product, quantity = 1) {
+            const existing = cart.find(p => p?.id === product?.id);
+
+            if (existing) {
+                cart = cart.map(p =>
+                    p.id === product.id
+                        ? { ...p, quantity: p.quantity + quantity }
+                        : p
+                );
+            } else {
+                cart = [...cart, { ...product, quantity }];
+            }
+
+            saveCart();
+            notify();
+        },
+
+        remove(productId) {
+            cart = cart.filter(p => p?.id !== productId);
+            saveCart();
+            notify();
+        }
     };
 }
 
-export default  useCart ;
+const stores = new Map();
+
+function getCartStore(key) {
+    if (!stores.has(key)) {
+        stores.set(key, createCartStore(key));
+    }
+    return stores.get(key);
+}
+
+const useCart = (localStorageKey = "teserakto_cart") => {
+    const store = getCartStore(localStorageKey);
+
+    const [cart, setCart] = useState(store.getCart());
+
+    useEffect(() => {
+        return store.subscribe(setCart);
+    }, [store]);
+
+    return {
+        cart,
+        addToCart: store.add,
+        removeFromCart: store.remove
+    };
+};
+
+export default useCart;

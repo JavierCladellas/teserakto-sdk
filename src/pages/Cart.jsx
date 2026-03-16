@@ -5,7 +5,7 @@ import useWindowDimensions from "../hooks/useScreenWidth";
 import useCart from "../hooks/useCart";
 
 
-const Cart = ({ globalCustomization = {}, cartCustomization = {}, checkoutUrl, device = null }) => {
+const Cart = ({ globalCustomization = {}, cartCustomization = {}, checkoutUrl, device = null, localStorageKey = "teserakto_cart" }) => {
     const [activeDevice, setActiveDevice] = useState('desktop');
     const { width } = useWindowDimensions();
 
@@ -23,7 +23,7 @@ const Cart = ({ globalCustomization = {}, cartCustomization = {}, checkoutUrl, d
         }
     }, [width, activeDevice, device]);
 
-    const { cart, removeFromCart } = useCart();
+    const { cart, removeFromCart } = useCart(localStorageKey);
 
     const handleRemoveItem = (productId) => {
         removeFromCart(productId);
