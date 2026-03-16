@@ -18,7 +18,8 @@ const normalizeConfig = (config) => {
 }
 let overrides = {
     global: null,
-    shop: null
+    shop: null,
+    activeDevice: null
 };
 
 
@@ -53,12 +54,14 @@ async function renderShop() {
 
     const global = overrides.global || defaultGlobalCustomization;
     const shop = overrides.shop || defaultShopCustomization;
+    const activeDevice = overrides.activeDevice || null;
 
     shopRoot.render(
         <Shop
             products={shopState.products}
             globalCustomization={global}
             shopCustomization={shop}
+            device={activeDevice}
         />
     );
 }
@@ -94,9 +97,10 @@ async function initShop(apiKey) {
     }
 }
 
-function updateShop(globalCustomization, shopCustomization) {
+function updateShop(globalCustomization, shopCustomization,activeDevice) {
     overrides.global = globalCustomization;
     overrides.shop = shopCustomization;
+    overrides.activeDevice = activeDevice;
 
     if (!shopRoot || shopState.products.length === 0) return;
 

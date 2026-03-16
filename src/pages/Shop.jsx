@@ -8,16 +8,20 @@ import useCart from "../hooks/useCart";
 
 
 
-const Shop = ({ products = [], globalCustomization = {}, shopCustomization = {} }) => {
-    const [activeDevice, setActiveDevice] = useState('desktop');
+const Shop = ({ products = [], globalCustomization = {}, shopCustomization = {}, device = null }) => {
+    const [activeDevice, setActiveDevice] = useState(device);
     const { width } = useWindowDimensions();
 
     useEffect(() => {
+        if (device) {
+            setActiveDevice(device);
+            return;
+        }
         const newActiveDevice = (width < 768 ) ? 'phone' : (  width < 1024  ) ? 'tablet' : 'desktop';
         if (newActiveDevice !== activeDevice) {
             setActiveDevice(newActiveDevice);
         }
-    }, [width, activeDevice]);
+    }, [width, activeDevice, device]);
 
     const { addToCart } = useCart();
 
