@@ -19,6 +19,8 @@ const normalizeConfig = (config) => {
 let overrides = {
     global: null,
     shop: null,
+    cart: null,
+    checkout: null,
     activeDevice: null
 };
 
@@ -47,6 +49,7 @@ let shopState = {
 
 let defaultGlobalCustomization = null;
 let defaultShopCustomization = null;
+let defaultCartCustomization = null;
 
 async function renderShop() {
     const shopRoot = getShopRoot();
@@ -108,32 +111,73 @@ function updateShop(globalCustomization, shopCustomization,activeDevice) {
 }
 
 
-async function initCart(apiKey, checkoutUrl, customizationOverrides = {}) {
+let cartRoot = null;
+let cartContainerRef = null;
+
+function getCartRoot() {
+    const container = document.getElementById("teserakto-cart");
+    if (!container) return null;
+
+    // If the container changed, create a new root
+    if (cartContainerRef !== container) {
+        cartContainerRef = container;
+        cartRoot = ReactDOM.createRoot(container);
+    }
+
+    return cartRoot;
+}
+
+async function renderCart(checkoutUrl) {
+    const cartRoot = getCartRoot();
+    if (!cartRoot) return;
+
+    const global = overrides.global || defaultGlobalCustomization;
+    const cart = overrides.cart || defaultShopCustomization;
+    const activeDevice = overrides.activeDevice || null;
+
+    cartRoot.render(
+        <Cart
+            globalCustomization={global}
+            cartCustomization={cart}
+            device={activeDevice}
+            checkoutUrl={checkoutUrl}
+        />
+    );
+}
+
+
+async function initCart(apiKey, checkoutUrl) {
     if (!apiKey) {
         console.error("[TeseraktoShopSDK] No API key provided");
         return;
     }
 
-    const cartContainer = document.getElementById("teserakto-cart");
     try {
-        
-        if (!cartContainer) {
-            console.error("[TeseraktoShopSDK] No container found for cart. Please add <div id='teserakto-cart'></div> to your HTML.");
-            return;
-        }
         const [customization] = await Promise.all([
             fetchCustomization(apiKey),
         ]);
-
-        const cartRoot = ReactDOM.createRoot(cartContainer);
-        const cartCustomization = normalizeConfig(customization.filter(c => c.context_type === 'cart' && c.context_key === "default")?.[0], customizationOverrides);
-        cartRoot.render(
-            <Cart cartCustomization={cartCustomization} checkoutUrl={checkoutUrl} />
+        defaultGlobalCustomization = normalizeConfig(
+            customization.find(c => c.context_type === "global" && c.context_key === "default")
         );
+
+        defaultCartCustomization = normalizeConfig(
+            customization.find(c => c.context_type === "cart" && c.context_key === "default")
+        );
+
+        renderCart(checkoutUrl);
+
     } catch (err) {
         console.error("[TeseraktoShopSDK] Failed to initialize cart", err);
-        cartContainer.innerHTML = `<div style="color:red;padding:20px;">Failed to load cart.</div>`;
     }
+}
+function updateCart(globalCustomization, cartCustomization, activeDevice) {
+    overrides.global = globalCustomization;
+    overrides.cart = cartCustomization;
+    overrides.activeDevice = activeDevice;
+
+    if (!cartRoot) return;
+
+    renderCart();
 }
 
 
@@ -166,6 +210,12 @@ async function initCheckout(apiKey, customizationOverrides = {}) {
     }
 }
 
-window.TeseraktoShopSDK = { initShop, updateShop, initCart, initCheckout };
+window.TeseraktoShopSDK = { 
+    initShop, updateShop,
+    initCart, updateCart,
+    initCheckout };
 
-export const TeseraktoShopSDK = { initShop, updateShop, initCart, initCheckout };
+export const TeseraktoShopSDK = { 
+    initShop, updateShop,
+    initCart, updateCart,
+    initCheckout };

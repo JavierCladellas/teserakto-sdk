@@ -4,11 +4,8 @@ import CartContent from "../components/CartContent";
 import useWindowDimensions from "../hooks/useScreenWidth";
 import useCart from "../hooks/useCart";
 
-/**
- * Cart — absolute overlay rendered on top of ShopPreview.
- * Parent container must be `position: relative` with a defined height.
- */
-const Cart = ({ cartCustomization = {}, checkoutUrl }) => {
+
+const Cart = ({ globalCustomization = {}, cartCustomization = {}, checkoutUrl, device = null }) => {
     const [activeDevice, setActiveDevice] = useState('desktop');
     const { width } = useWindowDimensions();
 
@@ -16,11 +13,15 @@ const Cart = ({ cartCustomization = {}, checkoutUrl }) => {
     const [ cartCount, setCartCount ] = useState(0);
 
     useEffect(() => {
+        if (device) {
+            setActiveDevice(device);
+            return;
+        }
         const newActiveDevice = (width < 768 ) ? 'phone' : (  width < 1024  ) ? 'tablet' : 'desktop';
         if (newActiveDevice !== activeDevice) {
             setActiveDevice(newActiveDevice);
         }
-    }, [width, activeDevice]);
+    }, [width, activeDevice, device]);
 
     const { cart, removeFromCart } = useCart();
 
@@ -34,20 +35,19 @@ const Cart = ({ cartCustomization = {}, checkoutUrl }) => {
     }, [cart]);
 
     const deviceSettings = cartCustomization[activeDevice] || cartCustomization.desktop || {};
-    const { drawerPosition, iconColor, badgeColor, badgeTextColor } = cartCustomization;
-    const isFullDrawer = activeDevice === 'phone' || drawerPosition === 'full' || deviceSettings.drawerWidth === 0;
+    const isFullDrawer = activeDevice === 'phone' || deviceSettings?.drawerPosition === 'full' || deviceSettings.drawerWidth === 0;
     const drawerWidth = isFullDrawer ? '100%' : `${deviceSettings.drawerWidth}px`;
 
 
     return (
         <div className="relative w-full h-full mx-auto rounded-lg" >
             <button onClick={( e) => {e.stopPropagation(); setShowDrawer(!showDrawer)}} >
-                <FaShoppingCart size={22} style={{ color: iconColor }} />
+                <FaShoppingCart size={22} style={{ color: "black" }} />
                 <span
                     className="absolute -top-2 -right-2 text-[10px] font-semibold rounded-full min-w-4 h-4 px-1 flex items-center justify-center"
                     style={{
-                        backgroundColor: badgeColor,
-                        color: badgeTextColor
+                        backgroundColor: globalCustomization?.notificationColor,
+                        color: globalCustomization?.primaryBtnTextColor,
                     }}
                 >
                     {cartCount}
@@ -59,13 +59,12 @@ const Cart = ({ cartCustomization = {}, checkoutUrl }) => {
                     style={{
                         top: 0,
                         width: isFullDrawer ? '100vw' : drawerWidth,
-                        ...(isFullDrawer
-                        ? { left: 0 } // full drawer
-                        : { [drawerPosition === 'right' ? 'right' : 'left']: 0 }),
+                        ...(isFullDrawer ? { left: 0 }  : { [deviceSettings?.drawerPosition === 'right' ? 'right' : 'left']: 0 }),
                     }}
                 >
                     <CartContent 
                         products={cart} 
+                        globalCustomization={globalCustomization}
                         cartCustomization={cartCustomization}
                         deviceSettings={deviceSettings}
                         onClose={() => setShowDrawer(false)}
