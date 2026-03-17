@@ -167,7 +167,6 @@ const Checkout = ({ globalCustomization, checkoutCustomization, device = null, c
 
         const validationErrors = validateAll(true);
         if (Object.keys(validationErrors).length > 0) {
-            console.log("Validation failed", validationErrors);
             return;
         }
 
