@@ -92,7 +92,7 @@ async function initShop(apiKey, cartLocalStorageKey = "teserakto_cart") {
         );
 
         defaultShopCustomization = normalizeConfig(
-            customization.find(c => c.context_type === "storefront" && c.context_key === "default")
+            customization.find(c => c.context_type === "shop" && c.context_key === "default")
         );
         
         renderShop(cartLocalStorageKey);
