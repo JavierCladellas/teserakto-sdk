@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { TextField } from "./TextField";
 
-const CheckoutPayment = ({ globalCustomization, checkoutCustomization, deviceSettings, formData, setFormData }) => {
+const CheckoutPayment = ({ globalCustomization, checkoutCustomization, deviceSettings, formData, setFormData, errors, setErrors }) => {
     const [paymentMethod, setPaymentMethod] = useState(formData.payment_method || "card");
     
     return (
@@ -56,7 +56,11 @@ const CheckoutPayment = ({ globalCustomization, checkoutCustomization, deviceSet
                             className="w-full text-lg tracking-widest bg-white rounded-md border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200"
                             style={{ fontSize: deviceSettings.formFieldFontSize }}
                             value={ formData.card_number }
-                            onChange={(e) => setFormData({ ...formData, card_number: e.target.value })}
+                            onChange={(e) => {
+                                setFormData({ ...formData, card_number: e.target.value });
+                                setErrors(prev => ({ ...prev, card_number: null }));
+                            }}
+                            externalError={errors?.card_number}
                         />
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -67,7 +71,11 @@ const CheckoutPayment = ({ globalCustomization, checkoutCustomization, deviceSet
                                 className="w-full bg-white rounded-md border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200"
                                 style={{ fontSize: deviceSettings.formFieldFontSize }}
                                 value={ formData.card_expiry }
-                                onChange={(e) => setFormData({ ...formData, card_expiry: e.target.value })}
+                                externalError={ errors?.card_expiry }
+                                onChange={(e) => {
+                                    setFormData({ ...formData, card_expiry: e.target.value });
+                                    setErrors(prev => ({ ...prev, card_expiry: null }));
+                                }}
                             />
                         </div>
                         <div className="flex flex-col">
@@ -77,7 +85,11 @@ const CheckoutPayment = ({ globalCustomization, checkoutCustomization, deviceSet
                                 className="w-full bg-white rounded-md border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200"
                                 style={{ fontSize: deviceSettings.formFieldFontSize }}
                                 value={ formData.card_cvc }
-                                onChange={(e) => setFormData({ ...formData, card_cvc: e.target.value })}
+                                externalError={errors?.card_cvc }
+                                onChange={(e) => {
+                                    setFormData({ ...formData, card_cvc: e.target.value });
+                                    setErrors(prev => ({ ...prev, card_cvc: null }));
+                                }}
                             />
                         </div>
                     </div>
@@ -88,7 +100,11 @@ const CheckoutPayment = ({ globalCustomization, checkoutCustomization, deviceSet
                             className="w-full bg-white rounded-md border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200"
                             style={{ fontSize: deviceSettings.formFieldFontSize }}
                             value={ formData.card_name }
-                            onChange={(e) => setFormData({ ...formData, card_name: e.target.value })}
+                            externalError={errors?.card_name}
+                            onChange={(e) => {
+                                setFormData({ ...formData, card_name: e.target.value });
+                                setErrors(prev => ({ ...prev, card_name: null }));
+                            }}
                         />
                     </div>
                 </div>

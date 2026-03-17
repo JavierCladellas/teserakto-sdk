@@ -1,6 +1,6 @@
 import { TextField } from "./TextField";
 
-const CheckoutGifts = ({ globalCustomization, checkoutCustomization, deviceSettings, formData, setFormData }) => {
+const CheckoutGifts = ({ globalCustomization, checkoutCustomization, deviceSettings, formData, setFormData, errors, setErrors }) => {
 
     return (
         <section className="mb-8">
@@ -11,7 +11,11 @@ const CheckoutGifts = ({ globalCustomization, checkoutCustomization, deviceSetti
                     placeholder={checkoutCustomization.giftRecipientNamePlaceholder}
                     style={{ fontSize: deviceSettings.formFieldFontSize }}
                     value={formData.alt_recipient_name}
-                    onChange={(e) => setFormData({ ...formData, alt_recipient_name: e.target.value })}
+                    externalError={errors?.alt_recipient_name}
+                    onChange={(e) => {
+                        setFormData({ ...formData, alt_recipient_name: e.target.value });
+                        setErrors(prev => ({ ...prev, alt_recipient_name: null }));
+                    }}
                 />
             </div>
             <div className={`grid gap-4 mt-4 grid-cols-1 md:grid-cols-1 sm:grid-cols-2`}> 

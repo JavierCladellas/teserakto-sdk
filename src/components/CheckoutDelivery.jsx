@@ -5,7 +5,7 @@ import DateField from "./DatePicker";
 import countryList from "react-select-country-list";
 
 
-const CheckoutDelivery = ({ globalCustomization, checkoutCustomization, deviceSettings, activeDevice, formData, setFormData }) => {
+const CheckoutDelivery = ({ globalCustomization, checkoutCustomization, deviceSettings, activeDevice, formData, setFormData, errors, setErrors }) => {
     const [deliveryMethod, setDeliveryMethod] = useState(formData.delivery_type || "delivery");
     const [deliveryCountry, setDeliveryCountry] = useState(formData.delivery_country || "");
 
@@ -66,7 +66,11 @@ const CheckoutDelivery = ({ globalCustomization, checkoutCustomization, deviceSe
                         placeholder={checkoutCustomization.deliveryAddressPlaceholder }
                         style={{ fontSize: deviceSettings.formFieldFontSize }}
                         value={formData.delivery_address}
-                        onChange={(e) => setFormData({ ...formData, delivery_address: e.target.value })}
+                        onChange={(e) => {
+                            setFormData({ ...formData, delivery_address: e.target.value });
+                            setErrors(prev => ({ ...prev, delivery_address: null }));
+                        }}
+                        externalError={errors?.delivery_address}
                     />
                 </div>
                 <div className={`grid ${activeDevice !== 'desktop' ? "grid-cols-1" : "grid-cols-3"} gap-4 mb-4`}> 
@@ -75,14 +79,22 @@ const CheckoutDelivery = ({ globalCustomization, checkoutCustomization, deviceSe
                         placeholder={checkoutCustomization.deliveryCityPlaceholder }
                         style={{ fontSize: deviceSettings.formFieldFontSize }}
                         value={formData.delivery_city}
-                        onChange={(e) => setFormData({ ...formData, delivery_city: e.target.value })}
+                        externalError={errors?.delivery_city}
+                        onChange={(e) => {
+                            setFormData({ ...formData, delivery_city: e.target.value });
+                            setErrors(prev => ({ ...prev, delivery_city: null }));
+                        }}
                     />
                     <TextField
                         label={checkoutCustomization.deliveryPostalCodeLabel }
                         placeholder={checkoutCustomization.deliveryPostalCodePlaceholder }
                         style={{ fontSize: deviceSettings.formFieldFontSize }}
                         value={formData.delivery_postal_code}
-                        onChange={(e) => setFormData({ ...formData, delivery_postal_code: e.target.value })}
+                        externalError={errors?.delivery_postal_code}
+                        onChange={(e) => {
+                            setFormData({ ...formData, delivery_postal_code: e.target.value });
+                            setErrors(prev => ({ ...prev, delivery_postal_code: null }));
+                        }}
                     />
                     <SearchableDropdown
                         label={checkoutCustomization.deliveryCountryLabel }

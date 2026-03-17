@@ -26,7 +26,7 @@ const getStepTabs = (settings) => {
     return tabs;
 };
 
-const Checkout = ({ globalCustomization, checkoutCustomization, device = null, cartLocalStorageKey = "teserakto_cart", handleSubmit = null }) => {
+const Checkout = ({ globalCustomization, checkoutCustomization, device = null, cartLocalStorageKey = "teserakto_cart", handleSubmit = null, validate = true }) => {
     const [activeDevice, setActiveDevice] = useState(device);
     const { width } = useWindowDimensions();
 
@@ -49,6 +49,13 @@ const Checkout = ({ globalCustomization, checkoutCustomization, device = null, c
     const stepTabs = getStepTabs(checkoutCustomization);
     const [activeTab, setActiveTab] = useState(stepTabs[0].key);
     const goToNextStep = () => {
+        const sectionErrors = validateField(activeTab, formData[activeTab], formData);
+
+        if (validate && sectionErrors) {
+            setErrors((prev) => ({ ...prev, [activeTab]: sectionErrors }));
+            return;
+        }
+
         const idx = stepTabs.findIndex(tab => tab.key === activeTab);
         if (idx < stepTabs.length - 1) {
             setActiveTab(stepTabs[idx + 1].key);
@@ -73,7 +80,7 @@ const Checkout = ({ globalCustomization, checkoutCustomization, device = null, c
             prefered_delivery_time_slot: "morning",
             delivery_instructions: "",
         },
-        gifts: {
+        gift: {
             is_alt_recipient: checkoutCustomization?.enableGiftStep,
             alt_recipient_name: "",
             alt_recipient_email: "",
@@ -89,9 +96,67 @@ const Checkout = ({ globalCustomization, checkoutCustomization, device = null, c
             card_name: ""
         }
     };
+    const validateField = (section, values, allData, forSubmit = false) => {
+        const errors = {};
+
+        if (section === "personal") {
+            if (!values.firstname?.trim()) errors.firstname = "First name is required";
+            if (!values.lastname?.trim()) errors.lastname = "Last name is required";
+
+            if (!values.email?.trim()) {
+                errors.email = "Email is required";
+            } else if (!/^\S+@\S+\.\S+$/.test(values.email)) {
+                errors.email = "Invalid email";
+            }
+
+            if (values.telephone && !/^[0-9+()\s-]+$/.test(values.telephone)) {
+                errors.telephone = "Invalid phone number";
+            }
+        }
+
+        if (section === "delivery") {
+            if (values.delivery_type==="delivery" && !values.delivery_address?.trim()) errors.delivery_address = "Address required";
+            if (values.delivery_type==="delivery" && !values.delivery_city?.trim()) errors.delivery_city = "City required";
+            if (values.delivery_type==="delivery" && !values.delivery_postal_code?.trim()) errors.delivery_postal_code = "Postal code required";
+        }
+
+        if (section === "gift" && checkoutCustomization.enableGiftStep) {
+            if (!values.alt_recipient_name?.trim()) {
+                errors.alt_recipient_name = "Recipient name required";
+            }
+        }
+
+        if (section === "payment" && values.payment_method === "card") {
+            if (!values.card_name?.trim()) errors.card_name = "Cardholder name required";
+
+            if (!values.card_number?.trim()) {
+                errors.card_number = "Card number required";
+            } else if (!/^\d{16}$/.test(values.card_number.replace(/\s/g, ""))) {
+                errors.card_number = "Invalid card number";
+            }
+
+            if (!values.card_expiry?.trim()) errors.card_expiry = "Expiry required";
+            if (!values.card_cvc?.trim()) errors.card_cvc = "CVC required";
+        }
+
+        return Object.keys(errors).length > 0 ? errors : null;
+    };
 
     const [formData, setFormData] = useState(inputDefaults);
     const [errors, setErrors] = useState({});
+
+    const validateAll = (forSubmit = true) => {
+        const newErrors = {};
+        
+        Object.keys(formData).forEach((section) => {
+            const sectionErrors = validateField(section, formData[section], formData, forSubmit);
+            if (sectionErrors) {
+                newErrors[section] = sectionErrors;
+            }
+        });
+        setErrors(newErrors);
+        return newErrors;
+    };
 
     const submitOrder = (e) => {
         e.preventDefault();
@@ -99,6 +164,13 @@ const Checkout = ({ globalCustomization, checkoutCustomization, device = null, c
             console.log("Place order prematurely fired")
             return 
         }
+
+        const validationErrors = validateAll(true);
+        if (Object.keys(validationErrors).length > 0) {
+            console.log("Validation failed", validationErrors);
+            return;
+        }
+
         handleSubmit(formData)
         .then(res => res.json())
         .then(data => {
@@ -116,6 +188,32 @@ const Checkout = ({ globalCustomization, checkoutCustomization, device = null, c
         });
     }
 
+
+    const handleTabChange = (nextTab) => {
+        const currentIndex = stepTabs.findIndex(tab => tab.key === activeTab);
+        const nextIndex = stepTabs.findIndex(tab => tab.key === nextTab);
+
+        // Allow going backwards freely
+        if (nextIndex <= currentIndex) {
+            setActiveTab(nextTab);
+            return;
+        }
+
+        const sectionErrors = validateField(
+            activeTab,
+            formData[activeTab],
+            formData
+        );
+
+        if (validate && sectionErrors) {
+            setErrors(prev => ({ ...prev, [activeTab]: sectionErrors }));
+            return; 
+        }
+
+        setActiveTab(nextTab);
+    };
+
+
     return (
         <div
             className="flex flex-col  p-6 md:p-6 min-h-[400px] w-full transition-all duration-300"
@@ -124,29 +222,29 @@ const Checkout = ({ globalCustomization, checkoutCustomization, device = null, c
                 color: globalCustomization.textColor,
             }}
         >
-            <CheckoutTabs stepTabs={stepTabs} globalCustomization={globalCustomization} checkoutCustomization={checkoutCustomization} deviceSettings={deviceSettings} activeTab={activeTab} setActiveTab={setActiveTab} />
+            <CheckoutTabs stepTabs={stepTabs} globalCustomization={globalCustomization} checkoutCustomization={checkoutCustomization} deviceSettings={deviceSettings} activeTab={activeTab} setActiveTab={handleTabChange} />
 
             <form onSubmit={submitOrder}
                 className={`gap-6 ${ deviceSettings?.layoutMode === 'column' ? 'flex flex-col' : 'flex flex-col sm:flex-row' }`}
             >
                 <div className="flex-1 rounded-lg border border-gray-200 p-4" style={{ backgroundColor: globalCustomization.surfaceColor }}>
                     {activeTab === "personal" && (
-                        <CheckoutPersonalInfo globalCustomization={globalCustomization} checkoutCustomization={checkoutCustomization} deviceSettings={deviceSettings} formData={formData.personal} setFormData={(personal) => setFormData({ ...formData, personal })} />
+                        <CheckoutPersonalInfo globalCustomization={globalCustomization} checkoutCustomization={checkoutCustomization} deviceSettings={deviceSettings} formData={formData.personal} setFormData={(personal) => setFormData({ ...formData, personal })}  errors={errors.personal} setErrors={(personalErrors) => setErrors({ ...errors, personal: personalErrors })} />
                     )}
                     {activeTab === "delivery" && (
-                        <CheckoutDelivery globalCustomization={globalCustomization} checkoutCustomization={checkoutCustomization} deviceSettings={deviceSettings} activeDevice={activeDevice} formData={formData.delivery} setFormData={(delivery) => setFormData({ ...formData, delivery })} />
+                        <CheckoutDelivery globalCustomization={globalCustomization} checkoutCustomization={checkoutCustomization} deviceSettings={deviceSettings} activeDevice={activeDevice} formData={formData.delivery} setFormData={(delivery) => setFormData({ ...formData, delivery })} errors={errors.delivery} setErrors={(deliveryErrors) => setErrors({ ...errors, delivery: deliveryErrors })} />
                     )}
                     {/* Gift Info step is only rendered if enabled */}
                     {activeTab === "gift" && checkoutCustomization.enableGiftStep === true && (
-                        <CheckoutGifts globalCustomization={globalCustomization} checkoutCustomization={checkoutCustomization} deviceSettings={deviceSettings} formData={formData.gifts} setFormData={(gifts) => setFormData({ ...formData, gifts })} />
+                        <CheckoutGifts globalCustomization={globalCustomization} checkoutCustomization={checkoutCustomization} deviceSettings={deviceSettings} formData={formData.gift} setFormData={(gift) => setFormData({ ...formData, gift })} errors={errors.gift} setErrors={(giftsErrors) => setErrors({ ...errors, gift: giftsErrors })} />
                     )}
                     {activeTab === "payment" && (
-                        <CheckoutPayment globalCustomization={globalCustomization} checkoutCustomization={checkoutCustomization} deviceSettings={deviceSettings} formData={formData.payment} setFormData={(payment) => setFormData({ ...formData, payment })} />
+                        <CheckoutPayment globalCustomization={globalCustomization} checkoutCustomization={checkoutCustomization} deviceSettings={deviceSettings} formData={formData.payment} setFormData={(payment) => setFormData({ ...formData, payment })} errors={errors.payment} setErrors={(paymentErrors) => setErrors({ ...errors, payment: paymentErrors })} />
                     )}
 
                 </div>
 
-                <CheckoutSummary globalCustomization={globalCustomization} checkoutCustomization={checkoutCustomization} deviceSettings={deviceSettings} activeTab={activeTab} goToNextStep={goToNextStep} cartLocalStorageKey={cartLocalStorageKey} formData={formData} />
+                <CheckoutSummary globalCustomization={globalCustomization} checkoutCustomization={checkoutCustomization} deviceSettings={deviceSettings} activeTab={activeTab} goToNextStep={goToNextStep} cartLocalStorageKey={cartLocalStorageKey} />
             </form>
         </div>
     );
