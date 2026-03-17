@@ -5,12 +5,12 @@ import DateField from "./DatePicker";
 import countryList from "react-select-country-list";
 
 
-const CheckoutDelivery = ({ globalCustomization, checkoutCustomization, deviceSettings, activeDevice }) => {
-    const [deliveryMethod, setDeliveryMethod] = useState("delivery");
-    const [deliveryCountry, setDeliveryCountry] = useState("");
+const CheckoutDelivery = ({ globalCustomization, checkoutCustomization, deviceSettings, activeDevice, formData, setFormData }) => {
+    const [deliveryMethod, setDeliveryMethod] = useState(formData.delivery_type || "delivery");
+    const [deliveryCountry, setDeliveryCountry] = useState(formData.delivery_country || "");
 
-    const [date, setDate] = useState(new Date());
-    const [timeSlot, setTimeSlot] = useState("morning");
+    const [date, setDate] = useState(formData.prefered_delivery_date || new Date());
+    const [timeSlot, setTimeSlot] = useState( formData.prefered_delivery_time_slot || "morning" );
     
     return (
         <section className="mb-8">
@@ -18,7 +18,7 @@ const CheckoutDelivery = ({ globalCustomization, checkoutCustomization, deviceSe
                 {checkoutCustomization.deliveryHeading}
             </h2>
             <div className="mb-4 flex gap-4">
-                <input type="hidden" name="delivery_type" value={deliveryMethod} />
+                <input type="hidden"  value={deliveryMethod} />
                 {checkoutCustomization.allowPickups === true && (
                     <>
                         <button
@@ -27,7 +27,10 @@ const CheckoutDelivery = ({ globalCustomization, checkoutCustomization, deviceSe
                             style={{
                                 backgroundColor: deliveryMethod === 'delivery' ? checkoutCustomization.switchColor : '',
                             }}
-                            onClick={() => setDeliveryMethod('delivery')}
+                            onClick={() => {
+                                setDeliveryMethod('delivery');
+                                setFormData({ ...formData, delivery_type: 'delivery' });
+                            }}
                         >
                             {checkoutCustomization.deliverySwitchLabel}
                         </button>
@@ -37,7 +40,18 @@ const CheckoutDelivery = ({ globalCustomization, checkoutCustomization, deviceSe
                             style={{
                                 backgroundColor: deliveryMethod === 'pickup' ? checkoutCustomization.switchColor : '',
                             }}
-                            onClick={() => setDeliveryMethod('pickup')}
+                            onClick={() => {
+                                setDeliveryMethod('pickup');
+                                setFormData({ ...formData, 
+                                    delivery_type: 'pickup',
+                                    delivery_address: "",
+                                    delivery_city: "",
+                                    delivery_postal_code: "",
+                                    prefered_delivery_date: "",
+                                    prefered_delivery_time_slot: "",
+                                    delivery_instructions: "",
+                                });
+                            }}
                         >
                             {checkoutCustomization.pickupSwitchLabel}
                         </button>
@@ -48,40 +62,62 @@ const CheckoutDelivery = ({ globalCustomization, checkoutCustomization, deviceSe
                 <>
                 <div className="grid grid-cols-1 gap-4 mb-4">
                     <TextField
-                        name="delivery_address"
                         label={checkoutCustomization.deliveryAddressLabel }
                         placeholder={checkoutCustomization.deliveryAddressPlaceholder }
                         style={{ fontSize: deviceSettings.formFieldFontSize }}
+                        value={formData.delivery_address}
+                        onChange={(e) => setFormData({ ...formData, delivery_address: e.target.value })}
                     />
                 </div>
                 <div className={`grid ${activeDevice !== 'desktop' ? "grid-cols-1" : "grid-cols-3"} gap-4 mb-4`}> 
                     <TextField
-                        name="delivery_city"
                         label={checkoutCustomization.deliveryCityLabel }
                         placeholder={checkoutCustomization.deliveryCityPlaceholder }
                         style={{ fontSize: deviceSettings.formFieldFontSize }}
+                        value={formData.delivery_city}
+                        onChange={(e) => setFormData({ ...formData, delivery_city: e.target.value })}
                     />
                     <TextField
-                        name="delivery_postal_code"
                         label={checkoutCustomization.deliveryPostalCodeLabel }
                         placeholder={checkoutCustomization.deliveryPostalCodePlaceholder }
                         style={{ fontSize: deviceSettings.formFieldFontSize }}
+                        value={formData.delivery_postal_code}
+                        onChange={(e) => setFormData({ ...formData, delivery_postal_code: e.target.value })}
                     />
                     <SearchableDropdown
-                        name="delivery_country"
                         label={checkoutCustomization.deliveryCountryLabel }
                         placeholder={checkoutCustomization.deliveryCountryPlaceholder }
                         options={countryList().getData()}
                         style={{ fontSize: deviceSettings.formFieldFontSize }}
                         value={deliveryCountry}
-                        onChange={e => setDeliveryCountry(e.target.value)}
+                        onChange={e => {
+                            setDeliveryCountry(e.target.value)
+                            setFormData({ ...formData, delivery_country: e.target.value });
+                        }}
                     />
                 </div>
                 {checkoutCustomization.allowDeliveryDate !== false && (
                     <div className={`grid ${activeDevice !== 'desktop' ? "grid-cols-1" : "grid-cols-2"} gap-4 mb-4`}>
-                        <DateField name="prefered_delivery_date" value={date} onChange={setDate} label={checkoutCustomization.deliveryDeliveryDateLabel} placeholder="DD-MM-YYYY" style={{ fontSize: deviceSettings.formFieldFontSize }} />
+                        <DateField
+                            value={date}
+                            onChange={e => {
+                                setDate(e);
+                                setFormData({ ...formData, prefered_delivery_date: e });
+                            }}
+                            label={checkoutCustomization.deliveryDeliveryDateLabel}
+                            placeholder="DD-MM-YYYY"
+                            style={{ 
+                                fontSize: deviceSettings.formFieldFontSize
+                            }} />
                         
-                        <SearchableDropdown name="prefered_delivery_time_slot" label={checkoutCustomization.deliveryTimeSlotLabel}  value={timeSlot} onChange={e => setTimeSlot(e.target.value)} options={[
+                        <SearchableDropdown
+                        label={checkoutCustomization.deliveryTimeSlotLabel}
+                        value={timeSlot}
+                        onChange={e => {
+                            setTimeSlot(e.target.value);
+                            setFormData({ ...formData, prefered_delivery_time_slot: e.target.value });
+                        }}
+                        options={[
                             { label: "Morning (9AM-12PM)", value: "morning" },
                             { label: "Afternoon (12PM-5PM)", value: "afternoon" },
                             { label: "Evening (5PM-8PM)", value: "evening" },
@@ -92,7 +128,6 @@ const CheckoutDelivery = ({ globalCustomization, checkoutCustomization, deviceSe
             )}
             <div className="grid grid-cols-1 gap-4">
                 <TextField
-                    name="delivery_instructions" 
                     label={checkoutCustomization.deliveryNotesLabel }
                     placeholder={checkoutCustomization.deliveryNotesPlaceholder}
                     type="textarea"

@@ -2,7 +2,7 @@ import ReactDOM from "react-dom/client";
 import Shop from "./pages/Shop";
 import Cart from "./pages/Cart.jsx";
 import Checkout from "./pages/Checkout.jsx";
-import { fetchProducts, fetchCustomization } from "./api.jsx";
+import { fetchProducts, fetchCustomization, submitOrder } from "./api.jsx";
 
 import "./index.css";
 
@@ -198,7 +198,7 @@ function getCheckoutRoot() {
     return checkoutRoot;
 }
 
-async function renderCheckout(cartLocalStorageKey = "teserakto_cart") {
+async function renderCheckout(cartLocalStorageKey = "teserakto_cart", handleSubmit = null) {
     const checkoutRoot = getCheckoutRoot();
     if (!checkoutRoot) return;
     
@@ -211,6 +211,7 @@ async function renderCheckout(cartLocalStorageKey = "teserakto_cart") {
             checkoutCustomization={checkout}
             device={activeDevice}
             cartLocalStorageKey={cartLocalStorageKey}
+            handleSubmit={handleSubmit}
         />
     );
 }
@@ -234,7 +235,10 @@ async function initCheckout(apiKey, cartLocalStorageKey = "teserakto_cart") {
             customization.find(c => c.context_type === "checkout" && c.context_key === "default")
         );
         
-        renderCheckout( cartLocalStorageKey );
+        const handleSubmit = async (orderData) => {
+            return submitOrder(apiKey, orderData);
+        };
+        renderCheckout( cartLocalStorageKey, handleSubmit );
         
     } catch (err) {
         console.error("[TeseraktoShopSDK] Failed to initialize checkout", err);

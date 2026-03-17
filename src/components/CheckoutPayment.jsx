@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { TextField } from "./TextField";
 
-const CheckoutPayment = ({ globalCustomization, checkoutCustomization, deviceSettings }) => {
-    const [paymentMethod, setPaymentMethod] = useState("card");
+const CheckoutPayment = ({ globalCustomization, checkoutCustomization, deviceSettings, formData, setFormData }) => {
+    const [paymentMethod, setPaymentMethod] = useState(formData.payment_method || "card");
     
     return (
         <section className="mb-8">
@@ -11,7 +11,6 @@ const CheckoutPayment = ({ globalCustomization, checkoutCustomization, deviceSet
                 style={{ fontSize: deviceSettings.titleFontSize }}
             >{checkoutCustomization.paymentHeading}</h2>
             <div className="mb-4 flex gap-4">
-                <input type="hidden" name="payment_method" value={paymentMethod} />
                 {checkoutCustomization.allowBankTransfer !== false && (
                     <>
                         <button
@@ -20,7 +19,10 @@ const CheckoutPayment = ({ globalCustomization, checkoutCustomization, deviceSet
                             style={{
                                 backgroundColor: paymentMethod === 'card' ? checkoutCustomization.switchColor : '',
                             }}
-                            onClick={() => setPaymentMethod('card')}
+                            onClick={() =>{
+                                setPaymentMethod('card');
+                                setFormData({ ...formData, payment_method: 'card' });
+                            }}
                         >
                             {checkoutCustomization.cardSwitchLabel}
                         </button>
@@ -30,7 +32,10 @@ const CheckoutPayment = ({ globalCustomization, checkoutCustomization, deviceSet
                             style={{
                                 backgroundColor: paymentMethod === 'bank' ? checkoutCustomization.switchColor : '',
                             }}
-                            onClick={() => setPaymentMethod('bank')}
+                            onClick={() => {
+                                setPaymentMethod('bank');
+                                setFormData({ ...formData, payment_method: 'bank' });
+                            }}
                         >
                             {checkoutCustomization.bankTransferSwitchLabel}
                         </button>
@@ -46,21 +51,45 @@ const CheckoutPayment = ({ globalCustomization, checkoutCustomization, deviceSet
                 >
                     <div className="flex flex-col gap-2">
                         <label className="text-xs font-semibold text-gray-700 mb-1">{checkoutCustomization.cardNumberLabel}</label>
-                        <TextField placeholder={checkoutCustomization.cardNumberPlaceholder} className="w-full text-lg tracking-widest bg-white rounded-md border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200" style={{ fontSize: deviceSettings.formFieldFontSize }} />
+                        <TextField 
+                            placeholder={checkoutCustomization.cardNumberPlaceholder}
+                            className="w-full text-lg tracking-widest bg-white rounded-md border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200"
+                            style={{ fontSize: deviceSettings.formFieldFontSize }}
+                            value={ formData.card_number }
+                            onChange={(e) => setFormData({ ...formData, card_number: e.target.value })}
+                        />
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="flex flex-col">
                             <label className="text-xs font-semibold text-gray-700 mb-1">{checkoutCustomization.cardExpiryLabel}</label>
-                            <TextField placeholder={checkoutCustomization.cardExpiryPlaceholder} className="w-full bg-white rounded-md border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200" style={{ fontSize: deviceSettings.formFieldFontSize }} />
+                            <TextField 
+                                placeholder={checkoutCustomization.cardExpiryPlaceholder}
+                                className="w-full bg-white rounded-md border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200"
+                                style={{ fontSize: deviceSettings.formFieldFontSize }}
+                                value={ formData.card_expiry }
+                                onChange={(e) => setFormData({ ...formData, card_expiry: e.target.value })}
+                            />
                         </div>
                         <div className="flex flex-col">
                             <label className="text-xs font-semibold text-gray-700 mb-1">{checkoutCustomization.cardCvcLabel}</label>
-                            <TextField placeholder={checkoutCustomization.cardCvcPlaceholder} className="w-full bg-white rounded-md border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200" style={{ fontSize: deviceSettings.formFieldFontSize }} />
+                            <TextField 
+                                placeholder={checkoutCustomization.cardCvcPlaceholder}
+                                className="w-full bg-white rounded-md border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200"
+                                style={{ fontSize: deviceSettings.formFieldFontSize }}
+                                value={ formData.card_cvc }
+                                onChange={(e) => setFormData({ ...formData, card_cvc: e.target.value })}
+                            />
                         </div>
                     </div>
                     <div className="flex flex-col gap-2">
                         <label className="text-xs font-semibold text-gray-700 mb-1">{checkoutCustomization.cardNameLabel}</label>
-                        <TextField placeholder={checkoutCustomization.cardNamePlaceholder} className="w-full bg-white rounded-md border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200" style={{ fontSize: deviceSettings.formFieldFontSize }} />
+                        <TextField 
+                            placeholder={checkoutCustomization.cardNamePlaceholder}
+                            className="w-full bg-white rounded-md border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200"
+                            style={{ fontSize: deviceSettings.formFieldFontSize }}
+                            value={ formData.card_name }
+                            onChange={(e) => setFormData({ ...formData, card_name: e.target.value })}
+                        />
                     </div>
                 </div>
             )}

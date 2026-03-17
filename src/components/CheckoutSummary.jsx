@@ -51,7 +51,8 @@ const CheckoutSummary = ({ globalCustomization, checkoutCustomization, deviceSet
             {/* Show Place Order button only in payment step, Next button otherwise */}
             {activeTab === "payment" ? (
                 <button
-                    type="button"
+                    key="submit"
+                    type="submit"
                     className="transition select-none flex items-center justify-center px-6 py-3 rounded-md"
                     style={{
                         backgroundColor: globalCustomization.primaryBtnColor,
@@ -63,6 +64,7 @@ const CheckoutSummary = ({ globalCustomization, checkoutCustomization, deviceSet
                 </button>
             ) : (
                 <button
+                    key="next"
                     type="button"
                     className="transition select-none flex items-center justify-center px-6 py-3 rounded-md"
                     onClick={goToNextStep}

@@ -49,6 +49,12 @@ function createCartStore(localStorageKey) {
             cart = cart.filter(p => p?.id !== productId);
             saveCart();
             notify();
+        },
+
+        clear() {
+            cart = [];
+            saveCart();
+            notify();
         }
     };
 }
