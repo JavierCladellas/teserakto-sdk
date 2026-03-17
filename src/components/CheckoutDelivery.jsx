@@ -5,7 +5,7 @@ import DateField from "./DatePicker";
 import countryList from "react-select-country-list";
 
 
-const CheckoutDelivery = ({ globalCustomization, checkoutCustomization, deviceSettings }) => {
+const CheckoutDelivery = ({ globalCustomization, checkoutCustomization, deviceSettings, activeDevice }) => {
     const [deliveryMethod, setDeliveryMethod] = useState("delivery");
     const [deliveryCountry, setDeliveryCountry] = useState("");
 
@@ -54,7 +54,7 @@ const CheckoutDelivery = ({ globalCustomization, checkoutCustomization, deviceSe
                         style={{ fontSize: deviceSettings.formFieldFontSize }}
                     />
                 </div>
-                <div className={`grid gap-4 mb-4 'grid-cols-1'md:grid-cols-1 sm:grid-cols-3`}> 
+                <div className={`grid ${activeDevice !== 'desktop' ? "grid-cols-1" : "grid-cols-3"} gap-4 mb-4`}> 
                     <TextField
                         name="delivery_city"
                         label={checkoutCustomization.deliveryCityLabel }
@@ -78,7 +78,7 @@ const CheckoutDelivery = ({ globalCustomization, checkoutCustomization, deviceSe
                     />
                 </div>
                 {checkoutCustomization.allowDeliveryDate !== false && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                    <div className={`grid ${activeDevice !== 'desktop' ? "grid-cols-1" : "grid-cols-2"} gap-4 mb-4`}>
                         <DateField name="prefered_delivery_date" value={date} onChange={setDate} label={checkoutCustomization.deliveryDeliveryDateLabel} placeholder="DD-MM-YYYY" style={{ fontSize: deviceSettings.formFieldFontSize }} />
                         
                         <SearchableDropdown name="prefered_delivery_time_slot" label={checkoutCustomization.deliveryTimeSlotLabel}  value={timeSlot} onChange={e => setTimeSlot(e.target.value)} options={[

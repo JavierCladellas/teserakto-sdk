@@ -68,7 +68,7 @@ const Checkout = ({ globalCustomization, checkoutCustomization, device = null, c
                         <CheckoutPersonalInfo globalCustomization={globalCustomization} checkoutCustomization={checkoutCustomization} deviceSettings={deviceSettings} />
                     )}
                     {activeTab === "delivery" && (
-                        <CheckoutDelivery globalCustomization={globalCustomization} checkoutCustomization={checkoutCustomization} deviceSettings={deviceSettings} />
+                        <CheckoutDelivery globalCustomization={globalCustomization} checkoutCustomization={checkoutCustomization} deviceSettings={deviceSettings} activeDevice={activeDevice} />
                     )}
                     {/* Gift Info step is only rendered if enabled */}
                     {activeTab === "gift" && checkoutCustomization.enableGiftStep === true && (

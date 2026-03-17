@@ -209,7 +209,7 @@ async function renderCheckout(cartLocalStorageKey = "teserakto_cart") {
         <Checkout
             globalCustomization={global}
             checkoutCustomization={checkout}
-            activeDevice={activeDevice}
+            device={activeDevice}
             cartLocalStorageKey={cartLocalStorageKey}
         />
     );
