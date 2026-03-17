@@ -1,5 +1,5 @@
 
-const CheckoutTabs = ({ stepTabs, globalSettings, deviceSettings, activeTab, setActiveTab }) => {
+const CheckoutTabs = ({ stepTabs, globalCustomization, checkoutCustomization, deviceSettings, activeTab, setActiveTab }) => {
 
     return (
         <div className="mb-8 gap-2 flex flex-wrap items-center justify-start">
@@ -14,7 +14,7 @@ const CheckoutTabs = ({ stepTabs, globalSettings, deviceSettings, activeTab, set
                             border: 'none',
                             outline: 'none',
                             fontSize: deviceSettings.stepFontSize,
-                            color: activeTab === tab.key ? (globalSettings.stepColor) : '#a3a3a3',
+                            color: activeTab === tab.key ? (checkoutCustomization.stepColor) : '#a3a3a3',
                         }}
                         onClick={() => setActiveTab(tab.key)}
                     >

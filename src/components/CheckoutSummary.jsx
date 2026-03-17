@@ -1,7 +1,7 @@
 import useCart from "../hooks/useCart";
 
-const CheckoutSummary = ({ customization, deviceSettings, activeTab, goToNextStep }) => {
-    const { cart } = useCart();
+const CheckoutSummary = ({ globalCustomization, checkoutCustomization, deviceSettings, activeTab, goToNextStep, cartLocalStorageKey = "teserakto_cart" }) => {
+    const { cart } = useCart(cartLocalStorageKey);
 
     const summaryWidth = Math.min(70, Math.max(30, Number(deviceSettings.summaryWidth ?? 45)));
     const subtotal = cart.reduce((sum, product) => sum + Number(product.price || 0), 0);
@@ -17,36 +17,36 @@ const CheckoutSummary = ({ customization, deviceSettings, activeTab, goToNextSte
                 (deviceSettings.layoutMode) === 'column' ? 'w-full min-w-0' : ''
             }`}
             style={{
-                backgroundColor: customization.panelColor,
+                backgroundColor: globalCustomization.surfaceColor,
                 width: (deviceSettings.layoutMode) === 'column' ? '100%' : `${summaryWidth}%`,
             }}
         >
             <h3 className="font-semibold mb-3" style={{ fontSize: Math.max(14, deviceSettings.titleFontSize) }}>
-                {customization.summaryTitleText}
+                {checkoutCustomization.summaryTitleText}
             </h3>
             <div className="space-y-2 mb-4" style={{ fontSize: deviceSettings.textFontSize }}>
                 {cart.map((product) => (
                     <div key={product.id} className="flex justify-between gap-2">
                         <div>
-                            <span style={{ color: customization.textColor }}>{product.quantity} x </span>
+                            <span style={{ color: globalCustomization.textColor }}>{product.quantity} x </span>
                             <span className="truncate">{product.name}</span>
                         </div>
-                        <span style={{ color: customization.accentColor }}>${Number(product?.price).toFixed(2)}</span>
+                        <span style={{ color: globalCustomization.accentColor }}>${Number(product?.price).toFixed(2)}</span>
                     </div>
                 ))}
             </div>
             <div className="border-t pt-3 flex justify-between mb-4 border-gray-300" style={{ fontSize: deviceSettings.textFontSize }}>
-                <span>{customization.subtotalLabelText}</span>
-                <span style={{ color: customization.accentColor }}>${subtotal.toFixed(2)}</span>
+                <span>{checkoutCustomization.subtotalLabelText}</span>
+                <span style={{ color: globalCustomization.accentColor }}>${subtotal.toFixed(2)}</span>
             </div>
             <div className="flex justify-between mb-4" style={{ fontSize: deviceSettings.textFontSize }}>
-                <span>{customization.shippingLabelText}</span>
-                <span style={{ color: customization.accentColor }}>${shippingCost.toFixed(2)}</span>
+                <span>{checkoutCustomization.shippingLabelText}</span>
+                <span style={{ color: globalCustomization.accentColor }}>${shippingCost.toFixed(2)}</span>
             </div>
 
             <div className="border-t pt-3 flex justify-between font-semibold mb-4 border-gray-300" style={{ fontSize: deviceSettings.textFontSize }}>
-                <span>{customization.totalLabelText}</span>
-                <span style={{ color: customization.accentColor }}>${total.toFixed(2)}</span>
+                <span>{checkoutCustomization.totalLabelText}</span>
+                <span style={{ color: globalCustomization.accentColor }}>${total.toFixed(2)}</span>
             </div>
             {/* Show Place Order button only in payment step, Next button otherwise */}
             {activeTab === "payment" ? (
@@ -54,12 +54,12 @@ const CheckoutSummary = ({ customization, deviceSettings, activeTab, goToNextSte
                     type="button"
                     className="transition select-none flex items-center justify-center px-6 py-3 rounded-md"
                     style={{
-                        backgroundColor: customization.primaryButtonColor,
-                        color: customization.primaryButtonTextColor,
+                        backgroundColor: globalCustomization.primaryBtnColor,
+                        color: globalCustomization.primaryBtnTextColor,
                         fontSize: deviceSettings.buttonFontSize,
                     }}
                 >  
-                    {customization.placeOrderText}
+                    {checkoutCustomization.placeOrderText}
                 </button>
             ) : (
                 <button
@@ -67,12 +67,12 @@ const CheckoutSummary = ({ customization, deviceSettings, activeTab, goToNextSte
                     className="transition select-none flex items-center justify-center px-6 py-3 rounded-md"
                     onClick={goToNextStep}
                     style={{
-                        backgroundColor: customization.primaryButtonColor,
-                        color: customization.primaryButtonTextColor,
+                        backgroundColor: globalCustomization.primaryBtnColor,
+                        color: globalCustomization.primaryBtnTextColor,
                         fontSize: deviceSettings.buttonFontSize,
                     }}
                 >
-                    {customization.nextBtnText}
+                    {checkoutCustomization.nextBtnText}
                 </button>
             )}
         </div>

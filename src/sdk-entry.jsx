@@ -50,6 +50,7 @@ let shopState = {
 let defaultGlobalCustomization = null;
 let defaultShopCustomization = null;
 let defaultCartCustomization = null;
+let defaultCheckoutCustomization = null;
 
 async function renderShop(cartLocalStorageKey) {
     const shopRoot = getShopRoot();
@@ -182,42 +183,82 @@ function updateCart(globalCustomization, cartCustomization, activeDevice,checkou
     renderCart(checkoutUrl,cartLocalStorageKey);
 }
 
+let checkoutRoot = null;
+let checkoutContainerRef = null;
 
+function getCheckoutRoot() {
+    const container = document.getElementById("teserakto-checkout");
+    if (!container) return null;
 
-async function initCheckout(apiKey, customizationOverrides = {}) {
+    if (checkoutContainerRef !== container) {
+        checkoutContainerRef = container;
+        checkoutRoot = ReactDOM.createRoot(container);
+    }
+
+    return checkoutRoot;
+}
+
+async function renderCheckout(cartLocalStorageKey = "teserakto_cart") {
+    const checkoutRoot = getCheckoutRoot();
+    if (!checkoutRoot) return;
+    
+    const global = overrides.global || defaultGlobalCustomization;
+    const checkout = overrides.checkout || defaultCheckoutCustomization;
+    const activeDevice = overrides.activeDevice || null;
+    checkoutRoot.render(
+        <Checkout
+            globalCustomization={global}
+            checkoutCustomization={checkout}
+            activeDevice={activeDevice}
+            cartLocalStorageKey={cartLocalStorageKey}
+        />
+    );
+}
+
+async function initCheckout(apiKey, cartLocalStorageKey = "teserakto_cart") {
     if (!apiKey) {
         console.error("[TeseraktoShopSDK] No API key provided");
         return;
     }
 
-    const checkoutContainer = document.getElementById("teserakto-checkout");
     try {
         
-        if (!checkoutContainer) {
-            console.error("[TeseraktoShopSDK] No container found for checkout. Please add <div id='teserakto-checkout'></div> to your HTML.");
-            return;
-        }
         const [customization] = await Promise.all([
             fetchCustomization(apiKey),
         ]);
-
-        const checkoutRoot = ReactDOM.createRoot(checkoutContainer);
-        const checkoutCustomization = normalizeConfig(customization.filter(c => c.context_type === 'checkout' && c.context_key === "default")?.[0], customizationOverrides);
-        checkoutRoot.render(
-            <Checkout customization={checkoutCustomization} />
+        defaultGlobalCustomization = normalizeConfig(
+            customization.find(c => c.context_type === "global" && c.context_key === "default")
         );
+
+        defaultCheckoutCustomization = normalizeConfig(
+            customization.find(c => c.context_type === "checkout" && c.context_key === "default")
+        );
+        
+        renderCheckout( cartLocalStorageKey );
+        
     } catch (err) {
         console.error("[TeseraktoShopSDK] Failed to initialize checkout", err);
-        checkoutContainer.innerHTML = `<div style="color:red;padding:20px;">Failed to load checkout.</div>`;
     }
+}
+
+function updateCheckout(globalCustomization, checkoutCustomization, activeDevice, cartLocalStorageKey = "teserakto_cart") {
+    overrides.global = globalCustomization;
+    overrides.checkout = checkoutCustomization;
+    overrides.activeDevice = activeDevice;
+    
+    if (!checkoutRoot) return;
+
+    renderCheckout( cartLocalStorageKey );
 }
 
 window.TeseraktoShopSDK = { 
     initShop, updateShop,
     initCart, updateCart,
-    initCheckout };
+    initCheckout, updateCheckout
+};
 
 export const TeseraktoShopSDK = { 
     initShop, updateShop,
     initCart, updateCart,
-    initCheckout };
+    initCheckout, updateCheckout
+};
