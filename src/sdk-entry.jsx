@@ -72,7 +72,7 @@ async function renderShop(cartLocalStorageKey) {
 }
 
 
-async function initShop(apiKey, cartLocalStorageKey = "teserakto_cart") {
+async function initShop(apiKey, orgId = null, cartLocalStorageKey = "teserakto_cart") {
     if (!apiKey) {
         console.error("[TeseraktoShopSDK] No API key provided");
         return;
@@ -82,8 +82,8 @@ async function initShop(apiKey, cartLocalStorageKey = "teserakto_cart") {
 
         // Fetch products and customization
         const [products, customization] = await Promise.all([
-            fetchProducts(apiKey),
-            fetchCustomization(apiKey),
+            fetchProducts(apiKey, orgId),
+            fetchCustomization(apiKey, orgId),
         ]);
 
         shopState.products = products;
@@ -149,7 +149,7 @@ async function renderCart(checkoutUrl, localStorageKey) {
 }
 
 
-async function initCart(apiKey, checkoutUrl, cartLocalStorageKey = "teserakto_cart") {
+async function initCart(apiKey, orgId = null, checkoutUrl, cartLocalStorageKey = "teserakto_cart") {
     if (!apiKey) {
         console.error("[TeseraktoShopSDK] No API key provided");
         return;
@@ -157,7 +157,7 @@ async function initCart(apiKey, checkoutUrl, cartLocalStorageKey = "teserakto_ca
 
     try {
         const [customization] = await Promise.all([
-            fetchCustomization(apiKey),
+            fetchCustomization(apiKey, orgId),
         ]);
         defaultGlobalCustomization = normalizeConfig(
             customization.find(c => c.context_type === "global" && c.context_key === "default")
@@ -217,7 +217,7 @@ async function renderCheckout(cartLocalStorageKey = "teserakto_cart", handleSubm
     );
 }
 
-async function initCheckout(apiKey, cartLocalStorageKey = "teserakto_cart", validate = true) {
+async function initCheckout(apiKey, orgId = null, cartLocalStorageKey = "teserakto_cart", validate = true) {
     if (!apiKey) {
         console.error("[TeseraktoShopSDK] No API key provided");
         return;
@@ -226,7 +226,7 @@ async function initCheckout(apiKey, cartLocalStorageKey = "teserakto_cart", vali
     try {
         
         const [customization] = await Promise.all([
-            fetchCustomization(apiKey),
+            fetchCustomization(apiKey, orgId),
         ]);
         defaultGlobalCustomization = normalizeConfig(
             customization.find(c => c.context_type === "global" && c.context_key === "default")
