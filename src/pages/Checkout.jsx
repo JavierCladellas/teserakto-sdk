@@ -26,7 +26,7 @@ const getStepTabs = (settings) => {
     return tabs;
 };
 
-const Checkout = ({ globalCustomization, checkoutCustomization, device = null, cartLocalStorageKey = "teserakto_cart", handleSubmit = null, validate = true }) => {
+const Checkout = ({ globalCustomization, checkoutCustomization, device = null, cartLocalStorageKey = "teserakto_cart", handleSubmit = null, validate = true, endpoint = null }) => {
     const [activeDevice, setActiveDevice] = useState(device);
     const { width } = useWindowDimensions();
 
@@ -225,6 +225,7 @@ const Checkout = ({ globalCustomization, checkoutCustomization, device = null, c
 
             <form onSubmit={submitOrder}
                 className={`gap-6 ${ deviceSettings?.layoutMode === 'column' ? 'flex flex-col' : 'flex flex-col sm:flex-row' }`}
+                action={endpoint || null}//For now teserakto doesnt handle payments.
             >
                 <div className="flex-1 rounded-lg border border-gray-200 p-4" style={{ backgroundColor: globalCustomization.surfaceColor }}>
                     {activeTab === "personal" && (

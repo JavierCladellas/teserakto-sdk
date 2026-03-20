@@ -198,7 +198,7 @@ function getCheckoutRoot() {
     return checkoutRoot;
 }
 
-async function renderCheckout(cartLocalStorageKey = "teserakto_cart", handleSubmit = null, validate = true) {
+async function renderCheckout(cartLocalStorageKey = "teserakto_cart", handleSubmit = null, validate = true, endpoint = null) {
     const checkoutRoot = getCheckoutRoot();
     if (!checkoutRoot) return;
     
@@ -213,14 +213,19 @@ async function renderCheckout(cartLocalStorageKey = "teserakto_cart", handleSubm
             cartLocalStorageKey={cartLocalStorageKey}
             handleSubmit={handleSubmit}
             validate={validate}
+            endpoint={endpoint}
         />
     );
 }
 
-async function initCheckout(apiKey, orgId = null, cartLocalStorageKey = "teserakto_cart", validate = true) {
+async function initCheckout(apiKey, orgId = null, cartLocalStorageKey = "teserakto_cart", validate = true, endpoint = null) {
     if (!apiKey) {
         console.error("[TeseraktoShopSDK] No API key provided");
         return;
+    }
+
+    if (!endpoint) {
+        throw new Error("No endpoint provided for checkout form submission. Teserakto does not handle payments for now.");
     }
 
     try {
@@ -239,7 +244,7 @@ async function initCheckout(apiKey, orgId = null, cartLocalStorageKey = "teserak
         const handleSubmit = async (orderData) => {
             return submitOrder(apiKey, orderData);
         };
-        renderCheckout( cartLocalStorageKey, handleSubmit, validate );
+        renderCheckout( cartLocalStorageKey, handleSubmit, validate, endpoint );
         
     } catch (err) {
         console.error("[TeseraktoShopSDK] Failed to initialize checkout", err);
