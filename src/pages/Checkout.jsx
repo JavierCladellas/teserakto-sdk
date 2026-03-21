@@ -26,7 +26,7 @@ const getStepTabs = (settings) => {
     return tabs;
 };
 
-const Checkout = ({ globalCustomization, checkoutCustomization, device = null, cartLocalStorageKey = "teserakto_cart", handleSubmit = null, validate = true, endpoint = null }) => {
+const Checkout = ({ globalCustomization, checkoutCustomization, device = null, cartLocalStorageKey = "teserakto_cart", handleSubmit = null, validate = true, endpoint = null, shippingSettings = {}}) => {
     const [activeDevice, setActiveDevice] = useState(device);
     const { width } = useWindowDimensions();
 
@@ -213,6 +213,50 @@ const Checkout = ({ globalCustomization, checkoutCustomization, device = null, c
     };
 
 
+    const [shippingCost, setShippingCost] = useState(0);
+    const [ availableCountries, setAvailableCountries] = useState([]);
+    const [ availableCities, setAvailableCities] = useState([]);
+    
+    useEffect(() => {
+        if (shippingSettings && formData.delivery) {
+            setShippingCost(shippingSettings.base_rate || 0);
+            let countries = [];
+            let cities = [];
+            if (!shippingSettings.ship_worldwide) {
+                countries = shippingSettings.shipping_zones?.map((z) => z.countries).flat() || [];
+                cities = shippingSettings.shipping_zones?.map((z) => z.cities).flat() || [];
+            }
+            setAvailableCountries(countries);
+            setAvailableCities(cities);
+        }
+    },[shippingSettings]);
+
+
+    //Get the shipping cost from the selected country + city
+
+    useEffect(() => {
+        if (shippingSettings && formData.delivery) {
+            let cost = shippingSettings.base_rate || 0;
+            const selectedCountry = formData.delivery.delivery_country;
+            const selectedCity = formData.delivery.delivery_city;
+
+            //Look in each shipping zone if the selected country or city is present and add the corresponding cost
+            shippingSettings.shipping_zones?.forEach((zone) => {
+                if (zone.countries?.includes(selectedCountry)){
+                    if (zone.cities?.length > 0) {
+                        if (zone.cities?.includes(selectedCity)) {
+                            cost = zone.shipping_rate;
+                        }
+                    } else {
+                        cost = zone.shipping_rate;
+                    }
+                }
+            });
+
+            setShippingCost(cost);
+        }
+    }, [formData.delivery, shippingSettings]);
+
     return (
         <div
             className="flex flex-col  p-6 md:p-6 min-h-[400px] w-full transition-all duration-300"
@@ -232,7 +276,7 @@ const Checkout = ({ globalCustomization, checkoutCustomization, device = null, c
                         <CheckoutPersonalInfo globalCustomization={globalCustomization} checkoutCustomization={checkoutCustomization} deviceSettings={deviceSettings} formData={formData.personal} setFormData={(personal) => setFormData({ ...formData, personal })}  errors={errors.personal} setErrors={(personalErrors) => setErrors({ ...errors, personal: personalErrors })} />
                     )}
                     {activeTab === "delivery" && (
-                        <CheckoutDelivery globalCustomization={globalCustomization} checkoutCustomization={checkoutCustomization} deviceSettings={deviceSettings} activeDevice={activeDevice} formData={formData.delivery} setFormData={(delivery) => setFormData({ ...formData, delivery })} errors={errors.delivery} setErrors={(deliveryErrors) => setErrors({ ...errors, delivery: deliveryErrors })} />
+                        <CheckoutDelivery globalCustomization={globalCustomization} checkoutCustomization={checkoutCustomization} deviceSettings={deviceSettings} activeDevice={activeDevice} formData={formData.delivery} setFormData={(delivery) => setFormData({ ...formData, delivery })} errors={errors.delivery} setErrors={(deliveryErrors) => setErrors({ ...errors, delivery: deliveryErrors })} availableCountries={availableCountries} availableCities={availableCities} />
                     )}
                     {/* Gift Info step is only rendered if enabled */}
                     {activeTab === "gift" && checkoutCustomization.enableGiftStep === true && (
@@ -244,7 +288,7 @@ const Checkout = ({ globalCustomization, checkoutCustomization, device = null, c
 
                 </div>
 
-                <CheckoutSummary globalCustomization={globalCustomization} checkoutCustomization={checkoutCustomization} deviceSettings={deviceSettings} activeTab={activeTab} goToNextStep={goToNextStep} cartLocalStorageKey={cartLocalStorageKey} />
+                <CheckoutSummary globalCustomization={globalCustomization} checkoutCustomization={checkoutCustomization} deviceSettings={deviceSettings} activeTab={activeTab} goToNextStep={goToNextStep} cartLocalStorageKey={cartLocalStorageKey} shippingCost={shippingCost} />
             </form>
         </div>
     );

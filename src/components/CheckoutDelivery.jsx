@@ -5,13 +5,15 @@ import DateField from "./DatePicker";
 import countryList from "react-select-country-list";
 
 
-const CheckoutDelivery = ({ globalCustomization, checkoutCustomization, deviceSettings, activeDevice, formData, setFormData, errors, setErrors }) => {
+const CheckoutDelivery = ({ globalCustomization, checkoutCustomization, deviceSettings, activeDevice, formData, setFormData, errors, setErrors, availableCountries, availableCities }) => {
     const [deliveryMethod, setDeliveryMethod] = useState(formData.delivery_type || "delivery");
     const [deliveryCountry, setDeliveryCountry] = useState(formData.delivery_country || "");
 
     const [date, setDate] = useState(formData.prefered_delivery_date || new Date());
     const [timeSlot, setTimeSlot] = useState( formData.prefered_delivery_time_slot || "morning" );
     
+    const allCountries = countryList().getData();
+
     return (
         <section className="mb-8">
             <h2 className="font-semibold mb-4 text-lg" style={{ fontSize: deviceSettings.titleFontSize }}>
@@ -74,17 +76,33 @@ const CheckoutDelivery = ({ globalCustomization, checkoutCustomization, deviceSe
                     />
                 </div>
                 <div className={`grid ${activeDevice !== 'desktop' ? "grid-cols-1" : "grid-cols-3"} gap-4 mb-4`}> 
-                    <TextField
-                        label={checkoutCustomization.deliveryCityLabel }
-                        placeholder={checkoutCustomization.deliveryCityPlaceholder }
-                        style={{ fontSize: deviceSettings.formFieldFontSize }}
-                        value={formData.delivery_city}
-                        externalError={errors?.delivery_city}
-                        onChange={(e) => {
-                            setFormData({ ...formData, delivery_city: e.target.value });
-                            setErrors(prev => ({ ...prev, delivery_city: null }));
-                        }}
-                    />
+                    { availableCities.length > 0 ? (
+                        <SearchableDropdown
+                            label={checkoutCustomization.deliveryCityLabel }
+                            placeholder={checkoutCustomization.deliveryCityPlaceholder }
+                            style={{ fontSize: deviceSettings.formFieldFontSize }}
+                            value={formData.delivery_city}
+                            externalError={errors?.delivery_city}
+                            onChange={(e) => {
+                                setFormData({ ...formData, delivery_city: e.target.value });
+                                setErrors(prev => ({ ...prev, delivery_city: null }));
+                            }}
+                            options={availableCities.map((city) => ({ label: city, value: city }))}
+                        />
+                    ):
+                    (
+                        <TextField
+                            label={checkoutCustomization.deliveryCityLabel }
+                            placeholder={checkoutCustomization.deliveryCityPlaceholder }
+                            style={{ fontSize: deviceSettings.formFieldFontSize }}
+                            value={formData.delivery_city}
+                            externalError={errors?.delivery_city}
+                            onChange={(e) => {
+                                setFormData({ ...formData, delivery_city: e.target.value });
+                                setErrors(prev => ({ ...prev, delivery_city: null }));
+                            }}
+                        />
+                    )}
                     <TextField
                         label={checkoutCustomization.deliveryPostalCodeLabel }
                         placeholder={checkoutCustomization.deliveryPostalCodePlaceholder }
@@ -99,7 +117,7 @@ const CheckoutDelivery = ({ globalCustomization, checkoutCustomization, deviceSe
                     <SearchableDropdown
                         label={checkoutCustomization.deliveryCountryLabel }
                         placeholder={checkoutCustomization.deliveryCountryPlaceholder }
-                        options={countryList().getData()}
+                        options={availableCountries.length > 0 ? availableCountries.map((countryCode) => ({ label: allCountries.find((c) => c.value === countryCode)?.label, value: countryCode })) : allCountries}
                         style={{ fontSize: deviceSettings.formFieldFontSize }}
                         value={deliveryCountry}
                         onChange={e => {

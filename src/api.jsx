@@ -39,6 +39,20 @@ export async function fetchCustomization(apiKey, orgId = null) {
 }
 
 
+
+export async function fetchShippingSettings(apiKey, orgId = null) {
+    const headers = { Authorization: `Bearer ${apiKey}` };
+    if (orgId) {
+        headers["X-Organization-Id"] = orgId;
+    }
+    const res = await fetch(`${API_URL}/settings/shipping`, {
+        method: "GET",
+        headers: headers,
+    });
+    if (!res.ok) throw new Error(`Failed to fetch shipping settings: ${res.statusText}`);
+    return res.json();
+}
+
 export async function submitOrder(apiKey, orderData) {
     const res = await fetch(`${API_URL}/checkout`, {
         method: "POST",

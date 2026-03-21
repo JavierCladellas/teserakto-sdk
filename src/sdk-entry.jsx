@@ -2,7 +2,7 @@ import ReactDOM from "react-dom/client";
 import Shop from "./pages/Shop";
 import Cart from "./pages/Cart.jsx";
 import Checkout from "./pages/Checkout.jsx";
-import { fetchProducts, fetchCustomization, submitOrder } from "./api.jsx";
+import { fetchProducts, fetchCustomization, submitOrder, fetchShippingSettings } from "./api.jsx";
 
 import "./index.css";
 
@@ -44,7 +44,8 @@ function getShopRoot() {
 
 
 let shopState = {
-    products: []
+    products: [],
+    shippingSettings: {},
 };
 
 let defaultGlobalCustomization = null;
@@ -214,6 +215,7 @@ async function renderCheckout(cartLocalStorageKey = "teserakto_cart", handleSubm
             handleSubmit={handleSubmit}
             validate={validate}
             endpoint={endpoint}
+            shippingSettings={shopState.shippingSettings}
         />
     );
 }
@@ -230,9 +232,12 @@ async function initCheckout(apiKey, orgId = null, cartLocalStorageKey = "teserak
 
     try {
         
-        const [customization] = await Promise.all([
+        const [customization, shippingSettings] = await Promise.all([
             fetchCustomization(apiKey, orgId),
+            fetchShippingSettings(apiKey, orgId)
         ]);
+        shopState.shippingSettings = shippingSettings;
+
         defaultGlobalCustomization = normalizeConfig(
             customization.find(c => c.context_type === "global" && c.context_key === "default")
         );

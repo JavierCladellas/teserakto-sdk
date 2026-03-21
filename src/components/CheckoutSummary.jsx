@@ -1,13 +1,12 @@
 import useCart from "../hooks/useCart";
 
-const CheckoutSummary = ({ globalCustomization, checkoutCustomization, deviceSettings, activeTab, goToNextStep, cartLocalStorageKey = "teserakto_cart" }) => {
+const CheckoutSummary = ({ globalCustomization, checkoutCustomization, deviceSettings, activeTab, goToNextStep, cartLocalStorageKey = "teserakto_cart", shippingCost = 0 }) => {
     const { cart } = useCart(cartLocalStorageKey);
 
     const summaryWidth = Math.min(70, Math.max(30, Number(deviceSettings.summaryWidth ?? 45)));
     const subtotal = cart.reduce((sum, product) => sum + Number(product.price || 0), 0);
 
     {/* TODO: Implement shipping cost calculation */}
-    const shippingCost = 0;
     const total = subtotal + shippingCost;
 
 
