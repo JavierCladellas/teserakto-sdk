@@ -12,7 +12,7 @@ const CheckoutSummary = ({ globalCustomization, checkoutCustomization, deviceSet
 
     return (
         <div
-            className={`rounded-lg border border-gray-200 p-4 flex flex-col h-full ${
+            className={`rounded-lg border border-solid border-gray-200 p-4 flex flex-col h-full ${
                 (deviceSettings.layoutMode) === 'column' ? 'w-full min-w-0' : ''
             }`}
             style={{
@@ -52,7 +52,7 @@ const CheckoutSummary = ({ globalCustomization, checkoutCustomization, deviceSet
                 <button
                     key="submit"
                     type="submit"
-                    className="transition select-none flex items-center justify-center px-6 py-3 rounded-md"
+                    className="transition select-none flex items-center justify-center px-6 py-3 rounded-md border-none"
                     style={{
                         backgroundColor: globalCustomization.primaryBtnColor,
                         color: globalCustomization.primaryBtnTextColor,
@@ -65,7 +65,7 @@ const CheckoutSummary = ({ globalCustomization, checkoutCustomization, deviceSet
                 <button
                     key="next"
                     type="button"
-                    className="transition select-none flex items-center justify-center px-6 py-3 rounded-md"
+                    className="transition select-none flex items-center justify-center px-6 py-3 rounded-md border-none"
                     onClick={goToNextStep}
                     style={{
                         backgroundColor: globalCustomization.primaryBtnColor,

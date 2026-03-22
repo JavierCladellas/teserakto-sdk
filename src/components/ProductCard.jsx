@@ -106,7 +106,7 @@ const ProductCard = ({ product, globalCustomization, shopCustomization, activeDe
                         ${price.toFixed(2)}
                     </span>
                     <button 
-                        className={`px-4 py-2 rounded-md text-white font-medium hover:opacity-90 transition-opacity ${
+                        className={`px-4 py-2 border-none rounded-md text-white font-medium hover:opacity-90 transition-opacity ${
                             activeDevice === 'phone' ? 'w-full' : 'w-auto'
                         }`}
                         onClick={handleAddToCartClick}

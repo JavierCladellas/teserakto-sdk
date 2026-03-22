@@ -24,7 +24,6 @@ const Modal = ({ open, onClose, title, children, size }) => {
     }, [open, onClose]);
 
     const handleBackdropClick = (e) => {
-        // Only close if the click target is the backdrop itself
         if (e.target === backdropRef.current) {
             onClose();
         }
@@ -39,24 +38,32 @@ const Modal = ({ open, onClose, title, children, size }) => {
                     animate={{ opacity: 1 }} 
                     exit={{ opacity: 0 }} 
                     onMouseDown={handleBackdropClick}
-                    className="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-[100] p-2 sm:p-6"
+                    // 🚨 Portal protection added here
+                    className="teserakto-container box-border fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-[100] p-2 sm:p-6"
                 >
                     <motion.div 
                         initial={{ scale: 0.9, opacity: 0 }} 
                         animate={{ scale: 1, opacity: 1 }} 
                         exit={{ scale: 0.9, opacity: 0 }}
                         transition={{ duration: 0.2, ease: "easeOut" }}
-                        className={`bg-white w-full rounded-2xl shadow-xl p-4 sm:p-6 overflow-y-auto max-h-[95vh] min-h-[30vh] ${sizeClasses[size || "md"]}`}
+                        // 🚨 Box-border protection added here
+                        className={`box-border bg-white w-full rounded-2xl shadow-xl p-4 sm:p-6 overflow-y-auto max-h-[95vh] min-h-[30vh] flex flex-col ${sizeClasses[size || "md"]}`}
                     >
-                        <div className="flex justify-between items-center mb-4 gap-2">
+                        <div className="flex justify-between items-center mb-4 gap-2 flex-shrink-0">
                             <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2 break-words">
                                 {title}
                             </h2>
-                            <button onClick={onClose} className="text-gray-400 hover:text-gray-700 text-xl" >
+                            <button 
+                                onClick={onClose} 
+                                className="text-gray-400 hover:text-gray-700 text-xl appearance-none border-none bg-transparent cursor-pointer" 
+                            >
                                 ✕
                             </button>
                         </div>
-                        {children}
+                        {/* 🚨 Your children are back! */}
+                        <div className="flex-1 min-h-0 overflow-hidden">
+                            {children}
+                        </div>
                     </motion.div>
                 </motion.div>
             )}

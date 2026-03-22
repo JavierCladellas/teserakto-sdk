@@ -41,7 +41,7 @@ const Cart = ({ globalCustomization = {}, cartCustomization = {}, checkoutUrl, d
     return (
         <div className="relative w-full h-full mx-auto rounded-lg" >
             <button 
-                className="relative"
+                className="relative border-none bg-transparent"
                 onClick={( e) => {e.stopPropagation(); setShowDrawer(!showDrawer)}} 
             >
                 <span className="relative inline-flex items-center justify-center w-6 h-6">

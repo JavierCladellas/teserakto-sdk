@@ -25,7 +25,7 @@ let overrides = {
 };
 
 
-
+// Inside your SDK
 let shopRoot = null;
 let shopContainerRef = null;
 
@@ -33,15 +33,13 @@ function getShopRoot() {
     const container = document.getElementById("teserakto-shop");
     if (!container) return null;
 
-    // If the container changed, create a new root
     if (shopContainerRef !== container) {
         shopContainerRef = container;
-        shopRoot = ReactDOM.createRoot(container);
+        shopRoot = ReactDOM.createRoot(container); 
     }
 
     return shopRoot;
 }
-
 
 let shopState = {
     products: [],

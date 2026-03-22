@@ -3,7 +3,7 @@
 const TextField = ({ label, name, value, onChange, type = "text", externalError, placeholder, readOnly, tooltip, required = false, style = {} }) => {
     const readOnlyStyle = readOnly ? "bg-gray-100 text-gray-500 cursor-not-allowed" : "";
 
-    const baseClasses = `w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${externalError ? "border-red-500" : "border-gray-300"} ${readOnlyStyle}`;
+    const baseClasses = `box-border w-full border border-solid rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${externalError ? "border-red-500" : "border-gray-300"} ${readOnlyStyle}`;
     const textareaClasses = `${baseClasses} min-h-[140px] max-h-64 resize-y leading-relaxed overflow-y-auto`;
 
     return (

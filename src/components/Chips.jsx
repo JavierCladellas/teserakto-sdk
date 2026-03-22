@@ -13,7 +13,7 @@ const Chips = ({
                     key={name}
                     type="button"
                     onClick={() => onItemClick?.(name)}
-                    className={`rounded-full border px-3 py-1 text-sm transition-colors ${
+                    className={`rounded-full border border-solid px-3 py-1 text-sm transition-colors ${
                         selectedItems.includes(name)
                             ? ''
                             : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
@@ -34,7 +34,7 @@ const Chips = ({
                 <button
                     type="button"
                     onClick={() => onClearFilters?.()}
-                    className="px-2 py-1 text-sm font-medium text-gray-500 hover:text-gray-700 underline underline-offset-2"
+                    className="px-2 py-1 border-none bg-transparent text-sm font-medium text-gray-500 hover:text-gray-700 underline underline-offset-2"
                 >
                     {clearLabel}
                 </button>

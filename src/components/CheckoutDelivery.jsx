@@ -25,7 +25,7 @@ const CheckoutDelivery = ({ globalCustomization, checkoutCustomization, deviceSe
                     <>
                         <button
                             type="button"
-                            className={`px-4 py-2 rounded ${deliveryMethod === 'delivery' ? 'text-white' : 'bg-gray-200 text-gray-700'}`}
+                            className={`px-4 py-2 border-none rounded ${deliveryMethod === 'delivery' ? 'text-white' : 'bg-gray-200 text-gray-700'}`}
                             style={{
                                 backgroundColor: deliveryMethod === 'delivery' ? checkoutCustomization.switchColor : '',
                             }}
@@ -38,7 +38,7 @@ const CheckoutDelivery = ({ globalCustomization, checkoutCustomization, deviceSe
                         </button>
                         <button
                             type="button"
-                            className={`px-4 py-2 rounded ${deliveryMethod === 'pickup' ? 'text-white' : 'bg-gray-200 text-gray-700'}`}
+                            className={`px-4 py-2 border-none rounded ${deliveryMethod === 'pickup' ? 'text-white' : 'bg-gray-200 text-gray-700'}`}
                             style={{
                                 backgroundColor: deliveryMethod === 'pickup' ? checkoutCustomization.switchColor : '',
                             }}

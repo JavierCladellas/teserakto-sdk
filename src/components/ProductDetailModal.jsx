@@ -108,8 +108,8 @@ const ProductDetailModal = ({ isOpen, onClose, product, globalCustomization, sho
                 style={{ fontFamily: globalCustomization.fontFamily }}
             >
                 {/* Product Image */}
-                <div className="w-1/2 sm:w-full h-full flex-shrink-0">
-                    <div className="relative w-full h-72 sm:h-full bg-gray-100 rounded-lg  p-4 sm:p-6">
+                <div className="w-full sm:w-1/2 h-full flex-shrink-0">
+                    <div className="relative w-full h-72 sm:h-full bg-gray-100 rounded-lg p-4 sm:p-6 flex items-center justify-center overflow-hidden">
                         <img 
                             src={`${currentImage ? `${apiUrl}/${currentImage}` : ''}`} 
                             alt={product.name}
@@ -124,7 +124,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, globalCustomization, sho
                 </div>
 
                 {/* Product Details */}
-                <div className="w-full flex flex-col h-full min-h-0 relative">
+                <div className="w-full sm:w-1/2 flex flex-col h-full min-h-0 relative">
                     <div className="min-h-0 overflow-y-auto pr-1 sm:pb-40">
                         <h2 
                             className="font-bold mb-2"
@@ -247,7 +247,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, globalCustomization, sho
                                 <div className="flex items-center gap-3">
                                     <button
                                         onClick={() => setQuantityInput(String(Math.max(1, quantity - 1)))}
-                                        className="w-10 h-10 rounded-md border-2 border-gray-300 hover:border-gray-400 flex items-center justify-center font-semibold"
+                                        className="w-10 h-10 bg-transparent border-solid rounded-md border-2 border-gray-300 hover:border-gray-400 flex items-center justify-center font-semibold"
                                         style={{ color: globalCustomization.textColor }}
                                     >
                                         −
@@ -265,7 +265,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, globalCustomization, sho
                                             const normalizedValue = Math.max(1, parseInt(quantityInput, 10) || 1);
                                             setQuantityInput(String(normalizedValue));
                                         }}
-                                        className="w-20 h-10 text-center border-2 border-gray-300 rounded-md appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                                        className="w-20 h-10 border-solid text-center border-2 border-gray-300 rounded-md appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                                         style={{ 
                                             fontSize: `${deviceSettings.buttonFontSize }px`,
                                             color: globalCustomization.textColor
@@ -274,7 +274,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, globalCustomization, sho
                                     />
                                     <button
                                         onClick={() => setQuantityInput(String(quantity + 1))}
-                                        className="w-10 h-10 rounded-md border-2 border-gray-300 hover:border-gray-400 flex items-center justify-center font-semibold"
+                                        className="w-10 h-10 bg-transparent rounded-md border-solid border-2 border-gray-300 hover:border-gray-400 flex items-center justify-center font-semibold"
                                         style={{ color: globalCustomization.textColor }}
                                     >
                                         +
@@ -285,7 +285,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, globalCustomization, sho
 
                         {/* Add to Cart Button */}
                         <button
-                            className="w-full py-3 rounded-md text-white font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full py-3 rounded-md border-none text-white font-semibold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                             style={{ 
                                 backgroundColor: globalCustomization.primaryBtnColor,
                                 color: globalCustomization.primaryBtnTextColor,

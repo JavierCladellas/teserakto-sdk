@@ -2,8 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
-button{
+button {
     cursor: pointer;
+}
+
+
+/* Create a localized reset that ONLY affects your SDK */
+.teserakto-container {
+  box-sizing: border-box;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.teserakto-container *,
+.teserakto-container *::before,
+.teserakto-container *::after {
+  box-sizing: inherit;
+}
+
+/* Fix the giant icon bug by forcing default SVG sizes inside your SDK */
+.teserakto-container svg {
+  width: 1.5rem; /* 24px */
+  height: 1.5rem;
 }

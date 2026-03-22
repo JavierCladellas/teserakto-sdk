@@ -8,6 +8,7 @@ export default defineConfig({
     port: 3000,
   },
   build: {
+    cssCodeSplit: false, // Forces all CSS into a single file
     lib: {
       entry: "./src/sdk-entry.jsx",
       name: "TeseraktoShopSDK",
@@ -17,6 +18,20 @@ export default defineConfig({
     rollupOptions: {
       external: ["react", "react-dom"],
       plugins: [peerDepsExternal()],
+      output: {
+        assetFileNames: (assetInfo) => {
+          // Look for ANY CSS file and force the exact name you need
+          const isCss = assetInfo.name?.endsWith('.css') || 
+                       (assetInfo.names && assetInfo.names.some(n => n.endsWith('.css')));
+          
+          if (isCss) {
+            return "teserakto-shop.css";
+          }
+          
+          // For anything else (like images/fonts), output without a hash
+          return "[name][extname]"; 
+        },
+      },
     },
   },
 });

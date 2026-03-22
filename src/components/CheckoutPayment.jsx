@@ -15,7 +15,7 @@ const CheckoutPayment = ({ globalCustomization, checkoutCustomization, deviceSet
                     <>
                         <button
                             type="button"
-                            className={`px-4 py-2 rounded ${paymentMethod === 'card' ? 'text-white' : 'bg-gray-200 text-gray-700'}`}
+                            className={`px-4 border-none py-2 rounded ${paymentMethod === 'card' ? 'text-white' : 'bg-gray-200 text-gray-700'}`}
                             style={{
                                 backgroundColor: paymentMethod === 'card' ? checkoutCustomization.switchColor : '',
                             }}
@@ -28,7 +28,7 @@ const CheckoutPayment = ({ globalCustomization, checkoutCustomization, deviceSet
                         </button>
                         <button
                             type="button"
-                            className={`px-4 py-2 rounded ${paymentMethod === 'bank' ? 'text-white' : 'bg-gray-200 text-gray-700'}`}
+                            className={`px-4 border-none py-2 rounded ${paymentMethod === 'bank' ? 'text-white' : 'bg-gray-200 text-gray-700'}`}
                             style={{
                                 backgroundColor: paymentMethod === 'bank' ? checkoutCustomization.switchColor : '',
                             }}

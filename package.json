@@ -1,6 +1,6 @@
 {
   "name": "teserakto-shop",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "main": "dist/teserakto-shop.es.js",
   "module": "dist/teserakto-shop.es.js",
   "description": "Shop SDK for Teserakto",
@@ -27,7 +27,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tailwindcss/postcss": "^4.2.1",
     "framer-motion": "^12.36.0",
     "lucide-react": "^0.577.0",
     "react-datepicker": "^9.1.0",

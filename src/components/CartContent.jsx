@@ -17,7 +17,7 @@ const CartContent = ({ products, globalCustomization, cartCustomization, deviceS
                     color: globalCustomization?.textColor,
                     fontSize: deviceSettings?.titleFontSize
                 }}>{cartCustomization?.titleText}</h2>
-                <button type="button" onClick={onClose}>
+                <button type="button" onClick={onClose} className="border-none bg-transparent">
                     <FaTimes className="text-gray-400" size={14} />
                 </button>
             </div>
@@ -42,7 +42,7 @@ const CartContent = ({ products, globalCustomization, cartCustomization, deviceS
                 </div>
                 <button
                     type="button"
-                    className="w-full py-2 rounded-md font-semibold transition-opacity hover:opacity-90"
+                    className="w-full py-2 rounded-md font-semibold transition-opacity hover:opacity-90 border-none"
                     style={{ 
                         backgroundColor: globalCustomization?.primaryBtnColor,
                         color: globalCustomization?.primaryBtnTextColor, 

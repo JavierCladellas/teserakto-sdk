@@ -25,7 +25,7 @@ const CartItemRow = ({ product, globalCustomization, cartCustomization, deviceSe
                     </span>
                 </div>
             </div>
-            <button className="mt-0.5 text-gray-400 hover:text-red-500 flex items-center gap-1 flex-shrink-0" style={{ fontSize: deviceSettings?.removeBtnFontSize }} type="button" onClick={() => onRemoveItem(product.id)}>
+            <button className="mt-0.5 text-gray-400 hover:text-red-500 flex items-center gap-1 flex-shrink-0 border-none bg-transparent" style={{ fontSize: deviceSettings?.removeBtnFontSize }} type="button" onClick={() => onRemoveItem(product.id)}>
                 <FaTrash size={10} />
                 <span>{cartCustomization?.removeButtonText}</span>
             </button>

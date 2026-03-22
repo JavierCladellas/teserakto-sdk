@@ -271,7 +271,7 @@ const Checkout = ({ globalCustomization, checkoutCustomization, device = null, c
                 className={`gap-6 ${ deviceSettings?.layoutMode === 'column' ? 'flex flex-col' : 'flex flex-col sm:flex-row' }`}
                 action={endpoint || null}//For now teserakto doesnt handle payments.
             >
-                <div className="flex-1 rounded-lg border border-gray-200 p-4" style={{ backgroundColor: globalCustomization.surfaceColor }}>
+                <div className="flex-1 rounded-lg border border-solid border-gray-200 p-4" style={{ backgroundColor: globalCustomization.surfaceColor }}>
                     {activeTab === "personal" && (
                         <CheckoutPersonalInfo globalCustomization={globalCustomization} checkoutCustomization={checkoutCustomization} deviceSettings={deviceSettings} formData={formData.personal} setFormData={(personal) => setFormData({ ...formData, personal })}  errors={errors.personal} setErrors={(personalErrors) => setErrors({ ...errors, personal: personalErrors })} />
                     )}
