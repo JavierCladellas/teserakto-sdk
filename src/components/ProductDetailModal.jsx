@@ -109,7 +109,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, globalCustomization, sho
             >
                 {/* Product Image */}
                 <div className="w-full sm:w-1/2 h-full flex-shrink-0">
-                    <div className="relative w-full h-72 sm:h-full bg-gray-100 rounded-lg p-4 sm:p-6 flex items-center justify-center overflow-hidden">
+                    <div className="relative w-full h-72 sm:h-full rounded-lg p-4 sm:p-6 flex items-center justify-center overflow-hidden">
                         <img 
                             src={`${currentImage ? `${apiUrl}/${currentImage}` : ''}`} 
                             alt={product.name}
@@ -183,7 +183,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, globalCustomization, sho
                                                 <button
                                                     key={value.id}
                                                     onClick={() => handleAttributeChange(attribute.id, value.id)}
-                                                    className={`px-4 py-2 rounded-md border-2 transition-all ${
+                                                    className={`px-4 py-2 border-solid rounded-md border-2 transition-all ${
                                                         selectedAttributes[attribute.id] === value.id
                                                             ? 'border-current font-semibold'
                                                             : 'border-gray-300 hover:border-gray-400'
