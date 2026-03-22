@@ -18,7 +18,7 @@ const CartContent = ({ products, globalCustomization, cartCustomization, deviceS
                     fontSize: deviceSettings?.titleFontSize
                 }}>{cartCustomization?.titleText}</h2>
                 <button type="button" onClick={onClose} className="border-none bg-transparent">
-                    <FaTimes className="text-gray-400" size={14} />
+                    <FaTimes className="text-gray-400" size={14} style={{width:'14px', height:'14px', minWidth:'14px', minHeight:'14px', flexShrink: 0}}/>
                 </button>
             </div>
             <div className="px-4">
