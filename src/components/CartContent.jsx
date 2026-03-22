@@ -48,7 +48,7 @@ const CartContent = ({ products, globalCustomization, cartCustomization, deviceS
                         color: globalCustomization?.primaryBtnTextColor, 
                         fontSize: deviceSettings?.buttonFontSize
                     }}
-                    onClick={() => (checkoutUrl && (window.location.href = checkoutUrl))}
+                    onClick={() => {checkoutUrl && (window.location.href = checkoutUrl); onClose();}}
                 >
                     {cartCustomization?.checkoutButtonText}
                 </button>
