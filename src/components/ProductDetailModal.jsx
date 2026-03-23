@@ -10,14 +10,22 @@ const ProductDetailModal = ({ isOpen, onClose, product, globalCustomization, sho
     const [isJustAdded, setIsJustAdded] = useState(false);
 
     useEffect(() => {
-        if (product?.variants?.[0]) {
-            setSelectedVariant(product.variants[0]);
-            // Initialize selected attributes from first variant
-            const initialAttributes = {};
-            product.variants[0].attributes?.forEach(attr => {
-                initialAttributes[attr.attribute.id] = attr.attribute_value.id;
-            });
-            setSelectedAttributes(initialAttributes);
+        if (product?.is_variable ){
+            if (product?.variants?.[0]) {
+                setSelectedVariant(product.variants[0]);
+                // Initialize selected attributes from first variant
+                const initialAttributes = {};
+                product.variants[0].attributes?.forEach(attr => {
+                    initialAttributes[attr.attribute.id] = attr.attribute_value.id;
+                });
+                setSelectedAttributes(initialAttributes);
+                setQuantityInput(1);
+                setIsJustAdded(false);
+            }
+        }
+        else {
+            setSelectedVariant(product);
+            setSelectedAttributes({});
             setQuantityInput(1);
             setIsJustAdded(false);
         }
