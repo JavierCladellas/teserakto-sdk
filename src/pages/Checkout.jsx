@@ -26,7 +26,7 @@ const getStepTabs = (settings) => {
     return tabs;
 };
 
-const Checkout = ({ globalCustomization, checkoutCustomization, device = null, cartLocalStorageKey = "teserakto_cart", handleSubmit = null, validate = true, endpoint = null, shippingSettings = {}}) => {
+const Checkout = ({ globalCustomization, checkoutCustomization, device = null, cartLocalStorageKey = "teserakto_cart", handleSubmit = null, validate = true, shippingSettings = {}}) => {
     const [activeDevice, setActiveDevice] = useState(device);
     const { width } = useWindowDimensions();
 
@@ -117,13 +117,10 @@ const Checkout = ({ globalCustomization, checkoutCustomization, device = null, c
         if (section === "delivery") {
             if (values.delivery_type==="delivery" && !values.delivery_address?.trim()) errors.delivery_address = "Address required";
             if (values.delivery_type==="delivery" && !values.delivery_city?.trim()) errors.delivery_city = "City required";
-            if (values.delivery_type==="delivery" && !values.delivery_postal_code?.trim()) errors.delivery_postal_code = "Postal code required";
+            if (values.delivery_type==="delivery" && !values.delivery_country?.trim()) errors.delivery_country = "Country required";
         }
 
         if (section === "gift" && checkoutCustomization.enableGiftStep) {
-            if (!values.alt_recipient_name?.trim()) {
-                errors.alt_recipient_name = "Recipient name required";
-            }
         }
 
         if (section === "payment" && values.payment_method === "card") {
@@ -214,6 +211,7 @@ const Checkout = ({ globalCustomization, checkoutCustomization, device = null, c
 
 
     const [shippingCost, setShippingCost] = useState(0);
+    const [shippingZoneName, setShippingZoneName] = useState("");
     const [ availableCountries, setAvailableCountries] = useState([]);
     const [ availableCities, setAvailableCities] = useState([]);
     
@@ -250,6 +248,7 @@ const Checkout = ({ globalCustomization, checkoutCustomization, device = null, c
                     } else {
                         cost = zone.shipping_rate;
                     }
+                    setShippingZoneName(zone.name);
                 }
             });
 
@@ -269,7 +268,6 @@ const Checkout = ({ globalCustomization, checkoutCustomization, device = null, c
 
             <form onSubmit={submitOrder}
                 className={`gap-6 ${ deviceSettings?.layoutMode === 'column' ? 'flex flex-col' : 'flex flex-col sm:flex-row' }`}
-                action={endpoint || null}//For now teserakto doesnt handle payments.
             >
                 <div className="flex-1 rounded-lg border border-solid border-gray-200 p-4" style={{ backgroundColor: globalCustomization.surfaceColor }}>
                     {activeTab === "personal" && (
@@ -288,7 +286,7 @@ const Checkout = ({ globalCustomization, checkoutCustomization, device = null, c
 
                 </div>
 
-                <CheckoutSummary globalCustomization={globalCustomization} checkoutCustomization={checkoutCustomization} deviceSettings={deviceSettings} activeTab={activeTab} goToNextStep={goToNextStep} cartLocalStorageKey={cartLocalStorageKey} shippingCost={shippingCost} />
+                <CheckoutSummary globalCustomization={globalCustomization} checkoutCustomization={checkoutCustomization} deviceSettings={deviceSettings} activeTab={activeTab} goToNextStep={goToNextStep} cartLocalStorageKey={cartLocalStorageKey} shippingCost={shippingCost} shippingZoneName={shippingZoneName} />
             </form>
         </div>
     );

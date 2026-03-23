@@ -197,7 +197,7 @@ function getCheckoutRoot() {
     return checkoutRoot;
 }
 
-async function renderCheckout(cartLocalStorageKey = "teserakto_cart", handleSubmit = null, validate = true, endpoint = null) {
+async function renderCheckout(cartLocalStorageKey = "teserakto_cart", handleSubmit = null, validate = true) {
     const checkoutRoot = getCheckoutRoot();
     if (!checkoutRoot) return;
     
@@ -212,7 +212,6 @@ async function renderCheckout(cartLocalStorageKey = "teserakto_cart", handleSubm
             cartLocalStorageKey={cartLocalStorageKey}
             handleSubmit={handleSubmit}
             validate={validate}
-            endpoint={endpoint}
             shippingSettings={shopState.shippingSettings}
         />
     );
@@ -245,9 +244,9 @@ async function initCheckout(apiKey, orgId = null, cartLocalStorageKey = "teserak
         );
         
         const handleSubmit = async (orderData) => {
-            return submitOrder(apiKey, orderData);
+            return submitOrder(endpoint, apiKey, orderData);
         };
-        renderCheckout( cartLocalStorageKey, handleSubmit, validate, endpoint );
+        renderCheckout( cartLocalStorageKey, handleSubmit, validate );
         
     } catch (err) {
         console.error("[TeseraktoShopSDK] Failed to initialize checkout", err);

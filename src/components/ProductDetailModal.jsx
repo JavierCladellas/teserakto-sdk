@@ -192,6 +192,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, globalCustomization, sho
                                                         borderColor: selectedAttributes[attribute.id] === value.id ? globalCustomization.primaryBtnColor : undefined,
                                                         color: selectedAttributes[attribute.id] === value.id ? globalCustomization.primaryBtnColor : globalCustomization.textColor,
                                                         fontSize: `${deviceSettings.buttonFontSize}px`,
+                                                        fontFamily: globalCustomization.fontFamily,
                                                         backgroundColor: selectedAttributes[attribute.id] === value.id ? `${globalCustomization.primaryBtnColor}10` : 'transparent'
                                                     }}
                                                 >
@@ -289,6 +290,7 @@ const ProductDetailModal = ({ isOpen, onClose, product, globalCustomization, sho
                             style={{ 
                                 backgroundColor: globalCustomization.primaryBtnColor,
                                 color: globalCustomization.primaryBtnTextColor,
+                                fontFamily: globalCustomization.fontFamily,
                                 fontSize: `${deviceSettings.buttonFontSize}px`
                             }}
                             onClick={() => {

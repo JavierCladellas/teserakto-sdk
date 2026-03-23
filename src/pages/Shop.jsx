@@ -80,6 +80,9 @@ const Shop = ({ products = [], globalCustomization = {}, shopCustomization = {},
     }, [totalPages]);
 
 
+    //TODO: BUG: Product added from card to cart is not the same as the one added from the modal
+
+
     return (
         <>
         <div className="flex flex-col items-center p-2">

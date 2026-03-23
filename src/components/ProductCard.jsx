@@ -113,6 +113,7 @@ const ProductCard = ({ product, globalCustomization, shopCustomization, activeDe
                         style={{ 
                             backgroundColor: globalCustomization.primaryBtnColor,
                             color: globalCustomization.primaryBtnTextColor,
+                            fontFamily: globalCustomization.fontFamily,
                             fontSize: `${buttonFontSize}px`
                         }}
                         disabled={!inStock}

@@ -1,12 +1,11 @@
 import useCart from "../hooks/useCart";
 
-const CheckoutSummary = ({ globalCustomization, checkoutCustomization, deviceSettings, activeTab, goToNextStep, cartLocalStorageKey = "teserakto_cart", shippingCost = 0 }) => {
+const CheckoutSummary = ({ globalCustomization, checkoutCustomization, deviceSettings, activeTab, goToNextStep, cartLocalStorageKey = "teserakto_cart", shippingCost = 0, shippingZoneName = "" }) => {
     const { cart } = useCart(cartLocalStorageKey);
 
     const summaryWidth = Math.min(70, Math.max(30, Number(deviceSettings.summaryWidth ?? 45)));
     const subtotal = cart.reduce((sum, product) => sum + Number(product.price || 0), 0);
 
-    {/* TODO: Implement shipping cost calculation */}
     const total = subtotal + shippingCost;
 
 
@@ -23,7 +22,7 @@ const CheckoutSummary = ({ globalCustomization, checkoutCustomization, deviceSet
             <h3 className="font-semibold mb-3" style={{ fontSize: Math.max(14, deviceSettings.titleFontSize) }}>
                 {checkoutCustomization.summaryTitleText}
             </h3>
-            <div className="space-y-2 mb-4" style={{ fontSize: deviceSettings.textFontSize }}>
+            <div className="space-y-2 mb-4" style={{ fontSize: deviceSettings.summaryFontSize }}>
                 {cart.map((product) => (
                     <div key={product.id} className="flex justify-between gap-2">
                         <div>
@@ -34,16 +33,23 @@ const CheckoutSummary = ({ globalCustomization, checkoutCustomization, deviceSet
                     </div>
                 ))}
             </div>
-            <div className="border-t pt-3 flex justify-between mb-4 border-gray-300" style={{ fontSize: deviceSettings.textFontSize }}>
+            <div className="border-t pt-3 flex justify-between mb-4 border-gray-300" style={{ fontSize: deviceSettings.summaryFontSize }}>
                 <span>{checkoutCustomization.subtotalLabelText}</span>
                 <span style={{ color: globalCustomization.accentColor }}>${subtotal.toFixed(2)}</span>
             </div>
-            <div className="flex justify-between mb-4" style={{ fontSize: deviceSettings.textFontSize }}>
-                <span>{checkoutCustomization.shippingLabelText}</span>
+            <div className="flex justify-between mb-4" style={{ fontSize: deviceSettings.summaryFontSize }}>
+                <span>{checkoutCustomization.shippingLabelText}
+                    {shippingZoneName && (
+                        <>
+                            <br/>
+                            ({shippingZoneName})
+                        </>
+                    )}
+                </span>
                 <span style={{ color: globalCustomization.accentColor }}>${shippingCost.toFixed(2)}</span>
             </div>
 
-            <div className="border-t pt-3 flex justify-between font-semibold mb-4 border-gray-300" style={{ fontSize: deviceSettings.textFontSize }}>
+            <div className="border-t pt-3 flex justify-between font-semibold mb-4 border-gray-300" style={{ fontSize: deviceSettings.summaryFontSize }}>
                 <span>{checkoutCustomization.totalLabelText}</span>
                 <span style={{ color: globalCustomization.accentColor }}>${total.toFixed(2)}</span>
             </div>
@@ -57,6 +63,7 @@ const CheckoutSummary = ({ globalCustomization, checkoutCustomization, deviceSet
                         backgroundColor: globalCustomization.primaryBtnColor,
                         color: globalCustomization.primaryBtnTextColor,
                         fontSize: deviceSettings.buttonFontSize,
+                        fontFamily: globalCustomization.fontFamily
                     }}
                 >  
                     {checkoutCustomization.placeOrderText}
@@ -71,6 +78,7 @@ const CheckoutSummary = ({ globalCustomization, checkoutCustomization, deviceSet
                         backgroundColor: globalCustomization.primaryBtnColor,
                         color: globalCustomization.primaryBtnTextColor,
                         fontSize: deviceSettings.buttonFontSize,
+                        fontFamily: globalCustomization.fontFamily
                     }}
                 >
                     {checkoutCustomization.nextBtnText}

@@ -7,13 +7,13 @@ const CheckoutPersonalInfo = ({ globalCustomization, checkoutCustomization, devi
         <section className="mb-8">
             <h2
                 className="font-semibold mb-4 text-lg"
-                style={{ fontSize: deviceSettings.titleFontSize  }}
+                style={{ fontSize: deviceSettings.titleFontSize, fontFamily: globalCustomization.fontFamily }}
             >{ checkoutCustomization.personalInfoHeading }</h2>
             <div className="grid grid-cols-2 gap-4">
                 <TextField
                     label={ checkoutCustomization.personalFirstNameLabel }
                     placeholder={checkoutCustomization.personalFirstNamePlaceholder}
-                    style={{ fontSize: deviceSettings.formFieldFontSize }}
+                    style={{ fontSize: deviceSettings.formFieldFontSize, fontFamily: globalCustomization.fontFamily }}
                     externalError={errors?.firstname}
                     value={formData.firstname}
                     onChange={(e) => {
@@ -24,7 +24,7 @@ const CheckoutPersonalInfo = ({ globalCustomization, checkoutCustomization, devi
                 <TextField
                     label={ checkoutCustomization.personalLastNameLabel }
                     placeholder={checkoutCustomization.personalLastNamePlaceholder}
-                    style={{ fontSize: deviceSettings.formFieldFontSize }}
+                    style={{ fontSize: deviceSettings.formFieldFontSize, fontFamily: globalCustomization.fontFamily }}
                     externalError={errors?.lastname}
                     value={formData.lastname}
                     onChange={(e) => {
@@ -38,7 +38,7 @@ const CheckoutPersonalInfo = ({ globalCustomization, checkoutCustomization, devi
                     type="email"
                     label={checkoutCustomization.personalEmailLabel}
                     placeholder={checkoutCustomization.personalEmailPlaceholder}
-                    style={{ fontSize: deviceSettings.formFieldFontSize }}
+                    style={{ fontSize: deviceSettings.formFieldFontSize, fontFamily: globalCustomization.fontFamily }}
                     externalError={errors?.email}
                     value={formData.email}
                     onChange={(e) => {
@@ -50,7 +50,7 @@ const CheckoutPersonalInfo = ({ globalCustomization, checkoutCustomization, devi
                     type="tel"
                     label={checkoutCustomization.personalPhoneLabel }
                     placeholder={checkoutCustomization.personalPhonePlaceholder }
-                    style={{ fontSize: deviceSettings.formFieldFontSize }}
+                    style={{ fontSize: deviceSettings.formFieldFontSize, fontFamily: globalCustomization.fontFamily }}
                     externalError={errors?.telephone}
                     value={formData.telephone}
                     onChange={(e) => {
@@ -63,7 +63,7 @@ const CheckoutPersonalInfo = ({ globalCustomization, checkoutCustomization, devi
                 <TextField
                     label={checkoutCustomization.personalCompanyLabel}
                     placeholder={checkoutCustomization.personalCompanyPlaceholder }
-                    style={{ fontSize: deviceSettings.formFieldFontSize }}
+                    style={{ fontSize: deviceSettings.formFieldFontSize, fontFamily: globalCustomization.fontFamily }}
                     externalError={errors?.company_name}
                     value={formData.company_name}
                     onChange={(e) => {

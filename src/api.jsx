@@ -53,8 +53,8 @@ export async function fetchShippingSettings(apiKey, orgId = null) {
     return res.json();
 }
 
-export async function submitOrder(apiKey, orderData) {
-    const res = await fetch(`${API_URL}/checkout`, {
+export async function submitOrder(endpointUrl, apiKey, orderData) {
+    const res = await fetch(endpointUrl || `${API_URL}/checkout`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

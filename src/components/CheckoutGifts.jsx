@@ -9,7 +9,7 @@ const CheckoutGifts = ({ globalCustomization, checkoutCustomization, deviceSetti
                 <TextField
                     label={checkoutCustomization.giftRecipientNameLabel }
                     placeholder={checkoutCustomization.giftRecipientNamePlaceholder}
-                    style={{ fontSize: deviceSettings.formFieldFontSize }}
+                    style={{ fontSize: deviceSettings.formFieldFontSize, fontFamily: globalCustomization.fontFamily }}
                     value={formData.alt_recipient_name}
                     externalError={errors?.alt_recipient_name}
                     onChange={(e) => {
@@ -22,14 +22,14 @@ const CheckoutGifts = ({ globalCustomization, checkoutCustomization, deviceSetti
                 <TextField
                     label={checkoutCustomization.giftRecipientEmailLabel }
                     placeholder={checkoutCustomization.giftRecipientEmailPlaceholder }
-                    style={{ fontSize: deviceSettings.formFieldFontSize }}
+                    style={{ fontSize: deviceSettings.formFieldFontSize, fontFamily: globalCustomization.fontFamily }}
                     value={formData.alt_recipient_email}
                     onChange={(e) => setFormData({ ...formData, alt_recipient_email: e.target.value })}
                 />
                 <TextField
                     label={checkoutCustomization.giftRecipientPhoneLabel }
                     placeholder={checkoutCustomization.giftRecipientPhonePlaceholder}
-                    style={{ fontSize: deviceSettings.formFieldFontSize }}
+                    style={{ fontSize: deviceSettings.formFieldFontSize, fontFamily: globalCustomization.fontFamily }}
                     value={formData.alt_recipient_phone}
                     onChange={(e) => setFormData({ ...formData, alt_recipient_phone: e.target.value })}
                 />
@@ -39,7 +39,7 @@ const CheckoutGifts = ({ globalCustomization, checkoutCustomization, deviceSetti
                     label={checkoutCustomization.giftPersonalMessageLabel }
                     placeholder={checkoutCustomization.giftPersonalMessagePlaceholder }
                     type="textarea"
-                    style={{ fontSize: deviceSettings.formFieldFontSize }}
+                    style={{ fontSize: deviceSettings.formFieldFontSize, fontFamily: globalCustomization.fontFamily }}
                     value={formData.personal_message}
                     onChange={(e) => setFormData({ ...formData, personal_message: e.target.value })}
                 />

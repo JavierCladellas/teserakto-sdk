@@ -28,6 +28,7 @@ const CheckoutDelivery = ({ globalCustomization, checkoutCustomization, deviceSe
                             className={`px-4 py-2 border-none rounded ${deliveryMethod === 'delivery' ? 'text-white' : 'bg-gray-200 text-gray-700'}`}
                             style={{
                                 backgroundColor: deliveryMethod === 'delivery' ? checkoutCustomization.switchColor : '',
+                                fontFamily: globalCustomization.fontFamily,
                             }}
                             onClick={() => {
                                 setDeliveryMethod('delivery');
@@ -41,6 +42,7 @@ const CheckoutDelivery = ({ globalCustomization, checkoutCustomization, deviceSe
                             className={`px-4 py-2 border-none rounded ${deliveryMethod === 'pickup' ? 'text-white' : 'bg-gray-200 text-gray-700'}`}
                             style={{
                                 backgroundColor: deliveryMethod === 'pickup' ? checkoutCustomization.switchColor : '',
+                                fontFamily: globalCustomization.fontFamily,
                             }}
                             onClick={() => {
                                 setDeliveryMethod('pickup');
@@ -66,7 +68,7 @@ const CheckoutDelivery = ({ globalCustomization, checkoutCustomization, deviceSe
                     <TextField
                         label={checkoutCustomization.deliveryAddressLabel }
                         placeholder={checkoutCustomization.deliveryAddressPlaceholder }
-                        style={{ fontSize: deviceSettings.formFieldFontSize }}
+                        style={{ fontSize: deviceSettings.formFieldFontSize, fontFamily: globalCustomization.fontFamily }}
                         value={formData.delivery_address}
                         onChange={(e) => {
                             setFormData({ ...formData, delivery_address: e.target.value });
@@ -80,7 +82,7 @@ const CheckoutDelivery = ({ globalCustomization, checkoutCustomization, deviceSe
                         <SearchableDropdown
                             label={checkoutCustomization.deliveryCityLabel }
                             placeholder={checkoutCustomization.deliveryCityPlaceholder }
-                            style={{ fontSize: deviceSettings.formFieldFontSize }}
+                            style={{ fontSize: deviceSettings.formFieldFontSize, fontFamily: globalCustomization.fontFamily}}
                             value={formData.delivery_city}
                             externalError={errors?.delivery_city}
                             onChange={(e) => {
@@ -94,7 +96,7 @@ const CheckoutDelivery = ({ globalCustomization, checkoutCustomization, deviceSe
                         <TextField
                             label={checkoutCustomization.deliveryCityLabel }
                             placeholder={checkoutCustomization.deliveryCityPlaceholder }
-                            style={{ fontSize: deviceSettings.formFieldFontSize }}
+                            style={{ fontSize: deviceSettings.formFieldFontSize, fontFamily: globalCustomization.fontFamily }}
                             value={formData.delivery_city}
                             externalError={errors?.delivery_city}
                             onChange={(e) => {
@@ -106,7 +108,7 @@ const CheckoutDelivery = ({ globalCustomization, checkoutCustomization, deviceSe
                     <TextField
                         label={checkoutCustomization.deliveryPostalCodeLabel }
                         placeholder={checkoutCustomization.deliveryPostalCodePlaceholder }
-                        style={{ fontSize: deviceSettings.formFieldFontSize }}
+                        style={{ fontSize: deviceSettings.formFieldFontSize, fontFamily: globalCustomization.fontFamily }}
                         value={formData.delivery_postal_code}
                         externalError={errors?.delivery_postal_code}
                         onChange={(e) => {
@@ -118,7 +120,7 @@ const CheckoutDelivery = ({ globalCustomization, checkoutCustomization, deviceSe
                         label={checkoutCustomization.deliveryCountryLabel }
                         placeholder={checkoutCustomization.deliveryCountryPlaceholder }
                         options={availableCountries.length > 0 ? availableCountries.map((countryCode) => ({ label: allCountries.find((c) => c.value === countryCode)?.label, value: countryCode })) : allCountries}
-                        style={{ fontSize: deviceSettings.formFieldFontSize }}
+                        style={{ fontSize: deviceSettings.formFieldFontSize, fontFamily: globalCustomization.fontFamily }}
                         value={deliveryCountry}
                         onChange={e => {
                             setDeliveryCountry(e.target.value)
@@ -137,7 +139,8 @@ const CheckoutDelivery = ({ globalCustomization, checkoutCustomization, deviceSe
                             label={checkoutCustomization.deliveryDeliveryDateLabel}
                             placeholder="DD-MM-YYYY"
                             style={{ 
-                                fontSize: deviceSettings.formFieldFontSize
+                                fontSize: deviceSettings.formFieldFontSize,
+                                fontFamily: globalCustomization.fontFamily
                             }} />
                         
                         <SearchableDropdown
@@ -151,7 +154,7 @@ const CheckoutDelivery = ({ globalCustomization, checkoutCustomization, deviceSe
                             { label: "Morning (9AM-12PM)", value: "morning" },
                             { label: "Afternoon (12PM-5PM)", value: "afternoon" },
                             { label: "Evening (5PM-8PM)", value: "evening" },
-                        ]} style={{ fontSize: deviceSettings.formFieldFontSize }} />
+                        ]} style={{ fontSize: deviceSettings.formFieldFontSize, fontFamily: globalCustomization.fontFamily }} />
                     </div>
                 )}
                 </>
@@ -161,7 +164,7 @@ const CheckoutDelivery = ({ globalCustomization, checkoutCustomization, deviceSe
                     label={checkoutCustomization.deliveryNotesLabel }
                     placeholder={checkoutCustomization.deliveryNotesPlaceholder}
                     type="textarea"
-                    style={{ fontSize: deviceSettings.formFieldFontSize }}
+                    style={{ fontSize: deviceSettings.formFieldFontSize, fontFamily: globalCustomization.fontFamily }}
                 />
             </div>
         </section>

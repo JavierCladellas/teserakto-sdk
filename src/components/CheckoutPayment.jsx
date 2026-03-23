@@ -18,6 +18,7 @@ const CheckoutPayment = ({ globalCustomization, checkoutCustomization, deviceSet
                             className={`px-4 border-none py-2 rounded ${paymentMethod === 'card' ? 'text-white' : 'bg-gray-200 text-gray-700'}`}
                             style={{
                                 backgroundColor: paymentMethod === 'card' ? checkoutCustomization.switchColor : '',
+                                fontFamily: globalCustomization.fontFamily
                             }}
                             onClick={() =>{
                                 setPaymentMethod('card');
@@ -31,6 +32,7 @@ const CheckoutPayment = ({ globalCustomization, checkoutCustomization, deviceSet
                             className={`px-4 border-none py-2 rounded ${paymentMethod === 'bank' ? 'text-white' : 'bg-gray-200 text-gray-700'}`}
                             style={{
                                 backgroundColor: paymentMethod === 'bank' ? checkoutCustomization.switchColor : '',
+                                fontFamily: globalCustomization.fontFamily
                             }}
                             onClick={() => {
                                 setPaymentMethod('bank');
@@ -54,7 +56,7 @@ const CheckoutPayment = ({ globalCustomization, checkoutCustomization, deviceSet
                         <TextField 
                             placeholder={checkoutCustomization.cardNumberPlaceholder}
                             className="w-full text-lg tracking-widest bg-white rounded-md border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200"
-                            style={{ fontSize: deviceSettings.formFieldFontSize }}
+                            style={{ fontSize: deviceSettings.formFieldFontSize, fontFamily: globalCustomization.fontFamily }}
                             value={ formData.card_number }
                             onChange={(e) => {
                                 setFormData({ ...formData, card_number: e.target.value });
@@ -69,7 +71,7 @@ const CheckoutPayment = ({ globalCustomization, checkoutCustomization, deviceSet
                             <TextField 
                                 placeholder={checkoutCustomization.cardExpiryPlaceholder}
                                 className="w-full bg-white rounded-md border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200"
-                                style={{ fontSize: deviceSettings.formFieldFontSize }}
+                                style={{ fontSize: deviceSettings.formFieldFontSize, fontFamily: globalCustomization.fontFamily }}
                                 value={ formData.card_expiry }
                                 externalError={ errors?.card_expiry }
                                 onChange={(e) => {
@@ -83,7 +85,7 @@ const CheckoutPayment = ({ globalCustomization, checkoutCustomization, deviceSet
                             <TextField 
                                 placeholder={checkoutCustomization.cardCvcPlaceholder}
                                 className="w-full bg-white rounded-md border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200"
-                                style={{ fontSize: deviceSettings.formFieldFontSize }}
+                                style={{ fontSize: deviceSettings.formFieldFontSize, fontFamily: globalCustomization.fontFamily }}
                                 value={ formData.card_cvc }
                                 externalError={errors?.card_cvc }
                                 onChange={(e) => {
@@ -98,7 +100,7 @@ const CheckoutPayment = ({ globalCustomization, checkoutCustomization, deviceSet
                         <TextField 
                             placeholder={checkoutCustomization.cardNamePlaceholder}
                             className="w-full bg-white rounded-md border border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-200"
-                            style={{ fontSize: deviceSettings.formFieldFontSize }}
+                            style={{ fontSize: deviceSettings.formFieldFontSize, fontFamily: globalCustomization.fontFamily }}
                             value={ formData.card_name }
                             externalError={errors?.card_name}
                             onChange={(e) => {
@@ -111,7 +113,7 @@ const CheckoutPayment = ({ globalCustomization, checkoutCustomization, deviceSet
             )}
             {paymentMethod === 'bank' && (
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-2 text-blue-700 text-sm shadow-sm">
-                    <svg className="inline mr-2" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+                    <svg style={{width: '20px', height: '20px' }} className="inline mr-2" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
                     {checkoutCustomization.bankTransferInstructionsText}
                 </div>
             )}

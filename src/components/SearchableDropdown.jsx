@@ -48,7 +48,7 @@ const SearchableDropdown = ({ label, name, value, onChange, options = [], placeh
     const readOnlyStyle = readOnly ? "bg-gray-100 text-gray-500 cursor-not-allowed opacity-70" : "cursor-pointer";
 
     return (
-        <div className={`relative w-full ${className}`} ref={containerRef} style={style}>
+        <div className={`relative w-full box-border ${className}`} ref={containerRef} style={style}>
             {label && (
                 <label className="mb-1 text-gray-700 flex items-center gap-1">
                     {label}
@@ -62,7 +62,7 @@ const SearchableDropdown = ({ label, name, value, onChange, options = [], placeh
                         onClick={() => {
                             if (!readOnly) setOpen(true);
                         }}
-                        className={`block w-full border border-solid rounded-md px-3 py-2 pr-6 lg:pr-2 ${externalError ? "border-red-500" : "border-gray-300"
+                        className={`block w-full box-border border border-solid rounded-md px-3 py-2 pr-6 lg:pr-2 ${externalError ? "border-red-500" : "border-gray-300"
                             } text-gray-900 ${readOnlyStyle}`}
                         style={style}
                     >
@@ -87,7 +87,7 @@ const SearchableDropdown = ({ label, name, value, onChange, options = [], placeh
             </div>
 
             {open && !readOnly && (
-                <div className="absolute left-0 right-0 bg-white border border-solid border-gray-200 rounded-md shadow-lg mt-1 max-h-60 overflow-auto z-50">
+                <div className="absolute box-border left-0 right-0 bg-white border border-solid border-gray-200 rounded-md shadow-lg mt-1 max-h-60 overflow-auto z-50">
                     {filtered.length === 0 ? (
                         <div className="px-3 py-2 text-gray-500 text-sm">No results</div>
                     ) : (

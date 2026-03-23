@@ -45,7 +45,8 @@ const CartContent = ({ products, globalCustomization, cartCustomization, deviceS
                     className="w-full py-2 rounded-md font-semibold transition-opacity hover:opacity-90 border-none"
                     style={{ 
                         backgroundColor: globalCustomization?.primaryBtnColor,
-                        color: globalCustomization?.primaryBtnTextColor, 
+                        color: globalCustomization?.primaryBtnTextColor,
+                        fontFamily: globalCustomization?.fontFamily,
                         fontSize: deviceSettings?.buttonFontSize
                     }}
                     onClick={() => {checkoutUrl && (window.location.href = checkoutUrl); onClose();}}
