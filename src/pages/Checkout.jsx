@@ -8,10 +8,6 @@ import CheckoutGifts from "../components/CheckoutGifts";
 import CheckoutSummary from "../components/CheckoutSummary";
 import useCart from "../hooks/useCart";
 
-const API_URL = import.meta.env.VITE_TESERAKTO_API_URL;
-
-
-
 const getStepTabs = (settings) => {
     const tabs = [
         { key: "personal", label:  "1. " + settings?.personalInfoHeading },
@@ -31,6 +27,18 @@ const Checkout = ({ globalCustomization, checkoutCustomization, device = null, c
     const { width } = useWindowDimensions();
 
     const cart = useCart(cartLocalStorageKey);
+    const cartItems = cart.cart.map(prod => {
+        if (prod?.variants?.length > 0) {
+            return {
+                id: prod.variants[0].id,
+                quantity: prod.quantity,
+            }
+        }
+        return {
+            id: prod.id,
+            quantity: prod.quantity
+        };
+    });
    
     useEffect(() => {
         if (device) {
@@ -94,7 +102,8 @@ const Checkout = ({ globalCustomization, checkoutCustomization, device = null, c
             card_expiry: "",
             card_cvc: "",
             card_name: ""
-        }
+        },
+        cart_items: cartItems,
     };
     const validateField = (section, values, allData, forSubmit = false) => {
         const errors = {};
@@ -166,7 +175,6 @@ const Checkout = ({ globalCustomization, checkoutCustomization, device = null, c
         if (Object.keys(validationErrors).length > 0) {
             return;
         }
-
         handleSubmit(formData)
         .then(res => res.json())
         .then(data => {
