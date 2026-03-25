@@ -29,14 +29,14 @@ const CheckoutPayment = ({ globalCustomization, checkoutCustomization, deviceSet
                         </button>
                         <button
                             type="button"
-                            className={`px-4 border-none py-2 rounded ${paymentMethod === 'bank' ? 'text-white' : 'bg-gray-200 text-gray-700'}`}
+                            className={`px-4 border-none py-2 rounded ${paymentMethod === 'bank_transfer' ? 'text-white' : 'bg-gray-200 text-gray-700'}`}
                             style={{
-                                backgroundColor: paymentMethod === 'bank' ? checkoutCustomization.switchColor : '',
+                                backgroundColor: paymentMethod === 'bank_transfer' ? checkoutCustomization.switchColor : '',
                                 fontFamily: globalCustomization.fontFamily
                             }}
                             onClick={() => {
-                                setPaymentMethod('bank');
-                                setFormData({ ...formData, payment_method: 'bank' });
+                                setPaymentMethod('bank_transfer');
+                                setFormData({ ...formData, payment_method: 'bank_transfer' });
                             }}
                         >
                             {checkoutCustomization.bankTransferSwitchLabel}
@@ -111,7 +111,7 @@ const CheckoutPayment = ({ globalCustomization, checkoutCustomization, deviceSet
                     </div>
                 </div>
             )}
-            {paymentMethod === 'bank' && (
+            {paymentMethod === 'bank_transfer' && (
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-2 text-blue-700 text-sm shadow-sm">
                     <svg style={{width: '20px', height: '20px' }} className="inline mr-2" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
                     {checkoutCustomization.bankTransferInstructionsText}
