@@ -1,6 +1,6 @@
 {
   "name": "teserakto-shop",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "main": "dist/teserakto-shop.es.js",
   "module": "dist/teserakto-shop.es.js",
   "description": "Shop SDK for Teserakto",
