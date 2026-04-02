@@ -51,8 +51,8 @@ const CheckoutDelivery = ({ globalCustomization, checkoutCustomization, deviceSe
                                     delivery_address: "",
                                     delivery_city: "",
                                     delivery_postal_code: "",
-                                    prefered_delivery_date: "",
-                                    prefered_delivery_time_slot: "",
+                                    prefered_delivery_date: null,
+                                    prefered_delivery_time_slot: null,
                                     delivery_instructions: "",
                                 });
                             }}
