@@ -35,7 +35,7 @@ function getShopRoot() {
 
     if (shopContainerRef !== container) {
         shopContainerRef = container;
-        shopRoot = ReactDOM.createRoot(container); 
+        shopRoot = ReactDOM.createRoot(container);
     }
 
     return shopRoot;
@@ -76,7 +76,7 @@ async function initShop(apiKey, orgId = null, cartLocalStorageKey = "teserakto_c
         console.error("[TeseraktoShopSDK] No API key provided");
         return;
     }
-    
+
     try {
 
         // Fetch products and customization
@@ -93,7 +93,7 @@ async function initShop(apiKey, orgId = null, cartLocalStorageKey = "teserakto_c
         defaultShopCustomization = normalizeConfig(
             customization.find(c => c.context_type === "shop" && c.context_key === "default")
         );
-        
+
         renderShop(cartLocalStorageKey);
 
     } catch (err) {
@@ -200,7 +200,7 @@ function getCheckoutRoot() {
 async function renderCheckout(cartLocalStorageKey = "teserakto_cart", handleSubmit = null, validate = true) {
     const checkoutRoot = getCheckoutRoot();
     if (!checkoutRoot) return;
-    
+
     const global = overrides.global || defaultGlobalCustomization;
     const checkout = overrides.checkout || defaultCheckoutCustomization;
     const activeDevice = overrides.activeDevice || null;
@@ -228,7 +228,7 @@ async function initCheckout(apiKey, orgId = null, cartLocalStorageKey = "teserak
     }
 
     try {
-        
+
         const [customization, shippingSettings] = await Promise.all([
             fetchCustomization(apiKey, orgId),
             fetchShippingSettings(apiKey, orgId)
@@ -242,12 +242,12 @@ async function initCheckout(apiKey, orgId = null, cartLocalStorageKey = "teserak
         defaultCheckoutCustomization = normalizeConfig(
             customization.find(c => c.context_type === "checkout" && c.context_key === "default")
         );
-        
+
         const handleSubmit = async (orderData) => {
             return submitOrder(endpoint, apiKey, orderData);
         };
         renderCheckout( cartLocalStorageKey, handleSubmit, validate );
-        
+
     } catch (err) {
         console.error("[TeseraktoShopSDK] Failed to initialize checkout", err);
     }
@@ -257,19 +257,19 @@ function updateCheckout(globalCustomization, checkoutCustomization, activeDevice
     overrides.global = globalCustomization;
     overrides.checkout = checkoutCustomization;
     overrides.activeDevice = activeDevice;
-    
+
     if (!checkoutRoot) return;
 
     renderCheckout( cartLocalStorageKey, null, validate );
 }
 
-window.TeseraktoShopSDK = { 
+window.TeseraktoShopSDK = {
     initShop, updateShop,
     initCart, updateCart,
     initCheckout, updateCheckout
 };
 
-export const TeseraktoShopSDK = { 
+export const TeseraktoShopSDK = {
     initShop, updateShop,
     initCart, updateCart,
     initCheckout, updateCheckout

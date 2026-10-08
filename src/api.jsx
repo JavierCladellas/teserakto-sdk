@@ -54,17 +54,24 @@ export async function fetchShippingSettings(apiKey, orgId = null) {
 }
 
 export async function submitOrder(endpointUrl, apiKey, orderData) {
-    const res = await fetch(endpointUrl || `${API_URL}/checkout`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${apiKey}`
-        },
-        body: JSON.stringify(orderData),
-    });
-    if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(`Failed to submit order: ${errorData.message || res.statusText}`);
+    try
+    {
+        const res = await fetch(endpointUrl || `${API_URL}/checkout`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${apiKey}`
+            },
+            body: JSON.stringify(orderData),
+        });
+        if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(`Failed to submit order: ${errorData.message || res.statusText}`);
+        }
+        return await res.json();
     }
-    return res.json();
+    catch (e)
+    {
+        throw new Error(`Request failed: ${e.message}`);
+    }
 }
